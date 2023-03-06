@@ -31,7 +31,5 @@ Toxicological tests are mandatory for professional drivers and only registered l
 <h3>Server Web - admin</h3>
 https://user-images.githubusercontent.com/28272136/223015761-6476bd4b-e52f-4290-8198-8c2959c57554.mp4
 
-<h3>App mobile geolocation</h3>
-https://user-images.githubusercontent.com/28272136/223016212-c168f3a5-7540-4b48-aeb5-ed1d6c6752c2.mp4
 
 

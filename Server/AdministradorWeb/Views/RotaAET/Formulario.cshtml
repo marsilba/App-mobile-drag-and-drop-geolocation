@@ -1,0 +1,104 @@
+﻿@model AdministradorWeb.Repositorio.HackatranObraArteEspecial
+
+@{
+    Layout = null;
+}
+
+
+@using (Html.BeginForm("Salvar", "RotaAETC", FormMethod.Post, new { @class = "form", role = "form", id = "frmObraArteEsp" }))
+{
+    @Html.HiddenFor(x => x.Id)
+    <div id="divFiltro" class="card">
+        <div class="card-header card-header-success card-header-icon">
+            <div class="card-icon">
+                <i class="material-icons">pin_drop</i>
+            </div>
+            <h4 class="card-title header-icons"></h4>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="col-md-4">
+                    <div class="form-row justify-content-center">
+                        <div class="col-md-12">
+                            <label for="ddlTipo">Tipo de Obra de Arte Especial</label>
+                            @Html.DropDownListFor(x => x.TipoId, (IEnumerable<SelectListItem>)ViewBag.TipoObras, "Selecione", new { id = "ddlTipo", @style = "width: 100%", @class = "form-control text-uppercase seleciona" })
+                        </div>
+                    </div>
+
+                    <div class="form-row justify-content-center">
+                        <div class="col-md-12 pt-4">
+                            <label for="txtEndereco">Endereço</label>
+                            @Html.TextBoxFor(x => x.Endereco, new { @id = "txtEndereco", @class = "form-control text-uppercase", @maxlength = 100 })
+                        </div>
+                    </div>
+
+                    <div class="form-row pt-5 justify-content-center">
+                        <div class="col-md-6">
+                            <label for="txtLatitude">Latitude</label>
+                            @Html.TextBoxFor(x => x.Latitude, new { @id = "txtLatitude", @class = "form-control text-uppercase", @readonly = "readonly" })
+                        </div>
+                        <div class="col-md-6">
+                            <label for="txtLongitude">Longitude</label>
+                            @Html.TextBoxFor(x => x.Longitude, new { @id = "txtLongitude", @class = "form-control text-uppercase", @readonly = "readonly" })
+                        </div>
+                    </div>
+
+                    <div class="form-row pt-5 justify-content-center">
+                        <div class="col-md-4">
+                            <label for="txtLargura">Largura (m)</label>
+                            @Html.TextBoxFor(x => x.Largura, new { @id = "txtLargura", @class = "form-control text-uppercase", @onkeydown = "return framework.validarNumero(event);", @maxlength = 10, @disabled = true });
+                        </div>
+                        <div class="col-md-4">
+                            <label for="txtAltura">Altura (m)</label>
+                            @Html.TextBoxFor(x => x.Altura, new { @id = "txtAltura", @class = "form-control text-uppercase", @onkeydown = "return framework.validarNumero(event);", @maxlength = 10, @disabled = true })
+                        </div>
+                        <div class="col-md-4">
+                            <label for="txtPeso">Peso Suportado (t)</label>
+                            @Html.TextBoxFor(x => x.Peso, new { @id = "txtPeso", @class = "form-control text-uppercase", @onkeydown = "return framework.validarNumero(event);", @maxlength = 10, @disabled = true })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div id="map" style="width:100%; height:500px; border:0px; border:0px; overflow: auto; margin-top: 5px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        latitudeMarker = '@Model.Latitude' == null ? "" : '@Model.Latitude';
+        longitudeMarker = '@Model.Longitude' == null ? "" : '@Model.Longitude';
+
+        if (acao == 'editar') {
+            habilitarCampos('@Model.TipoId');
+        }
+
+        initMap();
+    });
+
+    $('#ddlTipo').change(function () {
+        $('#txtLargura').val('');
+        $('#txtAltura').val('');
+        $('#txtPeso').val('');
+
+        var tipo = $(this).val();
+
+        habilitarCampos(tipo);
+    });
+
+
+</script>

@@ -1,0 +1,208 @@
+﻿@model AdministradorWeb.Repositorio.HackatranVeiculo
+
+@{
+    Layout = null;
+}
+
+
+@Html.HiddenFor(x => x.Id)
+
+<div id="divFormulario" class="card">
+    <div class="card-header card-header-success card-header-icon">
+        <div class="card-icon">
+            <i class="material-icons">directions_car</i>
+        </div>
+        <h4 class="card-title header-icons">Formulário</h4>
+    </div>
+    <div class="card-body" style="font-size: small;">
+        <div class="form-row">
+            <div class="col-md-12">
+                <div class="form-row">
+                    <div class="modal-upload col-md-3 pt-2 pl-2">
+
+                        @if (Model.Id == null)
+                        {
+                            <div id="profile">
+                                <div class="dashes"></div>
+                                <label>Foto</label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div id="profile" class="hasImage" style="background-image: url(@Model.UrlFoto)">
+                                <div class="dashes"></div>
+                                <label>Foto</label>
+                            </div>
+                        }
+
+
+                        @Html.TextBoxFor(x => x.Foto, new { id = "mediaFile", type = "file" })
+                    </div>
+                    <div class="col-md-9 mt-3" style="margin-left: -100px;">
+                        <label for="txtNome">Nome do Motorista</label>
+                        @Html.TextBoxFor(x => x.Motorista, new { @id = "txtNome", @class = "form-control text-uppercase", @maxlength = 100 })
+                    </div>
+                </div>
+                <div class="form-row mt-4">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <label for="txtCnh">CNH</label>
+                        @Html.TextBoxFor(x => x.Cnh, new { @id = "txtCnh", @class = "form-control text-uppercase", @onkeydown = "return framework.validarNumero(event);", @maxlength = 20 })
+                    </div>
+                    <div class="col-md-3">
+                        <label for="txtPlaca">Placa</label>
+                        @Html.TextBoxFor(x => x.Placa, new { @id = "txtPlaca", @class = "form-control text-uppercase", @maxlength = 8 })
+                    </div>
+                    <div class="col-md-3">
+                        <label for="txtPeso">Peso (t)</label>
+                        @Html.TextBoxFor(x => x.Peso, new { @id = "txtPeso", @class = "form-control text-uppercase", @onkeydown = "return framework.validarNumero(event);", @maxlength = 10 })
+                    </div>
+                </div>
+                <div class="form-row mt-4">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <label for="txtComprimento">Comprimento (m)</label>
+                        @Html.TextBoxFor(x => x.Comprimento, new { @id = "txtComprimento", @class = "form-control text-uppercase", @onkeydown = "return framework.validarNumero(event);", @maxlength = 10 })
+                    </div>
+                    <div class="col-md-3">
+                        <label for="txtAltura">Altura (m)</label>
+                        @Html.TextBoxFor(x => x.Altura, new { @id = "txtAltura", @class = "form-control text-uppercase", @onkeydown = "return framework.validarNumero(event);", @maxlength = 10 })
+                    </div>
+                    <div class="col-md-3">
+                        <label for="txtLargura">Largura (m)</label>
+                        @Html.TextBoxFor(x => x.Largura, new { @id = "txtLargura", @class = "form-control text-uppercase", @onkeydown = "return framework.validarNumero(event);", @maxlength = 10 })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#profile').addClass('dragging').removeClass('dragging');
+    });
+
+    $(function () {
+        $('#profile2').addClass('dragging').removeClass('dragging');
+    });
+
+    $('#profile').on('dragover', function () {
+
+        $('#profile').addClass('dragging')
+
+    }).on('dragleave', function () {
+
+        $('#profile').removeClass('dragging')
+
+    }).on('drop', function (e) {
+
+        $('#profile').removeClass('dragging hasImage');
+
+        if (e.originalEvent) {
+            var file = e.originalEvent.dataTransfer.files[0];
+            console.log(file);
+
+            var reader = new FileReader();
+
+            reader.readAsDataURL(file);
+            reader.onload = function (e) {
+                console.log(reader.result);
+                $('#profile').css({
+                    'background-image': 'url(' + reader.result + ')',
+                    'background-size': '100%',
+                    'background-repeat': 'no-repeat',
+                }).addClass('hasImage');
+            }
+        }
+    });
+
+    $('#profile2').on('dragover', function () {
+
+        $('#profile2').addClass('dragging')
+
+    }).on('dragleave', function () {
+
+        $('#profile2').removeClass('dragging')
+
+    }).on('drop', function (e) {
+
+        $('#profile2').removeClass('dragging hasImage');
+
+        if (e.originalEvent) {
+            var file = e.originalEvent.dataTransfer.files[0];
+            console.log(file);
+
+            var reader = new FileReader();
+
+            reader.readAsDataURL(file);
+            reader.onload = function (e) {
+                console.log(reader.result);
+                $('#profile2').css({
+                    'background-image': 'url(' + reader.result + ')',
+                    'background-size': '100%',
+                    'background-repeat': 'no-repeat',
+                }).addClass('hasImage');
+            }
+        }
+    });
+
+    $('#profile').on('click', function (e) {
+        console.log('clicked')
+        $('#mediaFile').click();
+    });
+
+    $('#profile2').on('click', function (e) {
+        console.log('clicked')
+        $('#mediaFile2').click();
+    });
+
+    window.addEventListener("dragover", function (e) {
+        e = e || event;
+        e.preventDefault();
+    }, false);
+
+    window.addEventListener("drop", function (e) {
+        e = e || event;
+        e.preventDefault();
+    }, false);
+
+    $('#mediaFile').change(function (e) {
+        var input = e.target;
+        if (input.files && input.files[0]) {
+            var file = input.files[0];
+
+            var reader = new FileReader();
+
+            reader.readAsDataURL(file);
+            reader.onload = function (e) {
+                console.log(reader.result);
+                $('#profile').css({
+                    'background-image': 'url(' + reader.result + ')',
+                    'background-size': '100%',
+                    'background-repeat': 'no-repeat',
+                }).addClass('hasImage');
+            }
+        }
+    });
+
+    $('#mediaFile2').change(function (e) {
+        var input = e.target;
+        if (input.files && input.files[0]) {
+            var file = input.files[0];
+
+            var reader = new FileReader();
+
+            reader.readAsDataURL(file);
+            reader.onload = function (e) {
+                console.log(reader.result);
+                $('#profile2').css({
+                    'background-image': 'url(' + reader.result + ')',
+                    'background-size': '100%',
+                    'background-repeat': 'no-repeat',
+                }).addClaModells('hasImage');
+            }
+        }
+    })
+</script>

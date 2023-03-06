@@ -1,0 +1,255 @@
+﻿@model AdministradorWeb.Repositorio.HackatranExame
+
+@{
+    Layout = null;
+}
+
+<link href="~/css/upload-file.css" rel="stylesheet" />
+<style type="text/css">
+    .qr-code {
+        top: 2px;
+    }
+
+    .pac-container {
+        z-index: 10000 !important;
+    }
+
+    form-control text-uppercase ui-autocomplete-input {
+        z-index: 10000 !important;
+    }
+
+    .bootstrap-datetimepicker-widget.dropdown-menu.bottom {
+        top: 26px !important;
+    }
+</style>
+@Html.HiddenFor(x => x.Nome, new { @id = "hdNome" })
+@Html.HiddenFor(x => x.Laboratorio, new { @id = "hdLaboratorio" })
+
+@if (Model.Id != null)
+{
+    @Html.HiddenFor(x => x.Id)
+}
+
+<div id="divFormulario" class="card">
+    <div class="card-body">
+        <div class="form-row">
+            <div class="modal-upload col-md-2 pull-left">
+                @if (Model.Id == null)
+                {
+                    <div id="profile">
+                        <div class="dashes"></div>
+                        <label>Foto</label>
+                    </div>
+                }
+                else
+                {
+                    <div id="profile" class="hasImage" style="background-image: url(@Model.UrlFoto)">
+                        <div class="dashes"></div>
+                        <label>Foto</label>
+                    </div>
+                }
+                @Html.TextBoxFor(x => x.Foto, new { id = "mediaFile", type = "file" })
+            </div>
+            <div class="col-md-8 mt-4">
+                <label for="ddlMotoristaForm">Motorista</label>
+                @Html.DropDownListFor(x => x.Id, new SelectList(@ViewBag.Motoristas, "Value", "Text"), "Selecione o Motorista", new { @id = "ddlMotoristaForm", @class = "form-control seleciona" })
+            </div>
+            <div class="col-md-2 mt-4">
+                <img id="imgAprovado" src="~/images/hackatran/aprovado.fw.png" width="90" style="margin-top: -40px; margin-left: 40px;" class="d-none" />
+                <img id="imgReprovado" src="~/images/hackatran/reprovado.fw.png" width="90" style="margin-top: -40px; margin-left: 40px;" class="d-none" />
+            </div>
+        </div>
+        <div class="form-row mt-4">
+            <div class="col-md-2"></div>
+            <div class="col-md-3 pl-2">
+                <label for="txtCnh">CNH</label>
+                @Html.TextBoxFor(x => x.Cnh, new { @id = "txtCnh", @class = "form-control text-uppercase", @onkeydown = "return framework.validarNumero(event);", @maxlength = 20 })
+            </div>
+            <div class="col-md-3 pl-3">
+                <label for="txtCpf">CPF</label>
+                @Html.TextBoxFor(x => x.Cpf, new { @id = "txtCpf", @class = "form-control text-uppercase", @onkeydown = "return framework.validarNumero(event);", @maxlength = 20 })
+            </div>
+            <div class="col-md-3 pl-3">
+                <label for="txtData">Data do Exame</label>
+                @Html.TextBoxFor(x => x.Data, new { @id = "txtData", @class = "form-control text-uppercase datepicker", @onfocus = "return framework.aplicarMascara(this,'99/99/9999');" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="form-row mt-4">
+            <div class="col-md-6 pl-3">
+                <label for="txtLaboratorio">Laboratório Responsável</label>
+                @Html.DropDownListFor(x => x.LaboratorioId, new SelectList(@ViewBag.Laboratorios, "Value", "Text"), "Selecione o Laboratório", new { @id = "ddlLaboratorioForm", @class = "form-control seleciona" })
+            </div>
+            <div class="col-md-6 pl-3">
+                @Html.LabelFor(x => x.Resultado, new { @style = "font-size: 18px;" })
+                <div class="clearfix"></div>
+                @Html.CheckBoxFor(x => x.FlagResultado, new { id = "chkFlagAtivo", @class = "d-none" })
+                <input type="checkbox" id="chkStatus" name="set-name" class="switch-input" onclick="javascript: alterarStatus(this);" style="font-size: 18px;">
+                <label for="chkStatus" class="switch-label mt-2 ml-0"><span class="toggle--on">APROVADO</span><span class="toggle--off">REPROVADO</span></label>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    // ----- On render -----
+    $(function () {
+        $('#profile').addClass('dragging').removeClass('dragging');
+    });
+
+    $(function () {
+        $('#profile2').addClass('dragging').removeClass('dragging');
+    });
+
+    $('#profile').on('dragover', function () {
+
+        $('#profile').addClass('dragging')
+
+    }).on('dragleave', function () {
+
+        $('#profile').removeClass('dragging')
+
+    }).on('drop', function (e) {
+
+        $('#profile').removeClass('dragging hasImage');
+
+        if (e.originalEvent) {
+            var file = e.originalEvent.dataTransfer.files[0];
+            console.log(file);
+
+            var reader = new FileReader();
+
+            reader.readAsDataURL(file);
+            reader.onload = function (e) {
+                console.log(reader.result);
+                $('#profile').css({
+                    'background-image': 'url(' + reader.result + ')',
+                    'background-size': '100%',
+                    'background-repeat': 'no-repeat',
+                }).addClass('hasImage');
+            }
+        }
+    });
+
+    $('#profile2').on('dragover', function () {
+
+        $('#profile2').addClass('dragging')
+
+    }).on('dragleave', function () {
+
+        $('#profile2').removeClass('dragging')
+
+    }).on('drop', function (e) {
+
+        $('#profile2').removeClass('dragging hasImage');
+
+        if (e.originalEvent) {
+            var file = e.originalEvent.dataTransfer.files[0];
+            console.log(file);
+
+            var reader = new FileReader();
+
+            reader.readAsDataURL(file);
+            reader.onload = function (e) {
+                console.log(reader.result);
+                $('#profile2').css({
+                    'background-image': 'url(' + reader.result + ')',
+                    'background-size': '100%',
+                    'background-repeat': 'no-repeat',
+                }).addClass('hasImage');
+            }
+        }
+    });
+
+    $('#profile').on('click', function (e) {
+        console.log('clicked')
+        $('#mediaFile').click();
+    });
+
+    $('#profile2').on('click', function (e) {
+        console.log('clicked')
+        $('#mediaFile2').click();
+    });
+
+    window.addEventListener("dragover", function (e) {
+        e = e || event;
+        e.preventDefault();
+    }, false);
+
+    window.addEventListener("drop", function (e) {
+        e = e || event;
+        e.preventDefault();
+    }, false);
+
+    $('#mediaFile').change(function (e) {
+        var input = e.target;
+        if (input.files && input.files[0]) {
+            var file = input.files[0];
+
+            var reader = new FileReader();
+
+            reader.readAsDataURL(file);
+            reader.onload = function (e) {
+                console.log(reader.result);
+                $('#profile').css({
+                    'background-image': 'url(' + reader.result + ')',
+                    'background-size': '100%',
+                    'background-repeat': 'no-repeat',
+                }).addClass('hasImage');
+            }
+        }
+    });
+
+    $('#mediaFile2').change(function (e) {
+        var input = e.target;
+        if (input.files && input.files[0]) {
+            var file = input.files[0];
+
+            var reader = new FileReader();
+
+            reader.readAsDataURL(file);
+            reader.onload = function (e) {
+                console.log(reader.result);
+                $('#profile2').css({
+                    'background-image': 'url(' + reader.result + ')',
+                    'background-size': '100%',
+                    'background-repeat': 'no-repeat',
+                }).addClaModells('hasImage');
+            }
+        }
+    })
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#txtData').focus();
+        $('#ddlMotoristaForm').focus();
+        framework.configurarCalendario();
+
+        if (acao == 'editar') {
+            var checked = '@Model.Resultado' == 'True';
+            document.getElementById('chkStatus').checked = checked;
+
+            $('#ddlMotoristaForm').prop('disabled', true);
+                var aprovado = '@Model.Resultado';
+
+                if (aprovado == 'True') {
+                $('#txtResultado').val('APROVADO');
+                $('#txtResultado').addClass('text-success');
+
+                $('#imgAprovado').removeClass('d-none');
+                $('#imgReprovado').addClass('d-none');
+            } else {
+                $('#txtResultado').val('REPROVADO');
+                $('#txtResultado').addClass('text-danger');
+
+                $('#imgAprovado').addClass('d-none');
+                $('#imgReprovado').removeClass('d-none');
+            }
+        }
+    });
+</script>

@@ -1,0 +1,283 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/toggle-switch.css" />
+
+<div id="divFiltro" class="card">
+    <div class="card-header card-header-success card-header-icon">
+        <div class="card-icon">
+            <i class="material-icons">filter_list</i>
+        </div>
+        <h4 class="card-title header-icons">Filtro</h4>
+    </div>
+
+    <div class="card-body">
+        <div class="col-md-12">
+            <div class="form-row">
+                <div class="col-md-3">
+                    <label for="ddlMotorista">Motoristas</label>
+                    @Html.DropDownList("ddlMotorista", new SelectList(@ViewBag.Motoristas, "Value", "Text"), "Selecione o Motorista", new { @class = "form-control seleciona" })
+                </div>
+                <div class="col-md-2 ml-5">
+                    <button id="btnPesquisar" class="btn btn-warning ripple botao-filtro">Pesquisar</button>
+                    <button id="btnIncluir" class="btn btn-warning botao-filtro" onclick="javascript: cadastrar();">Incluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="pnlConteudo" class="pt-1 d-none">
+    <span id="divGrid"></span>
+</div>
+
+@*@Html.Partial("Modal")*@
+
+
+<div class="modal" id="_modal" role="dialog" aaria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div id="_modal_dialog" class="modal-dialog mt-3">
+        <div class="modal-content">
+            @using (Html.BeginForm("SalvarExame", "Laboratorio", FormMethod.Post, new { @class = "form", role = "form", id = "frmExame", onkeydown = "return event.key != 'Enter';" }))
+            {
+                <div class="card-header bg-success text-white text-center text-uppercase">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title font-weight-bold" id="_modal_title"></h5>
+                </div>
+                <div class="modal-body" id="_modal_body"></div>
+                <div class="modal-footer">
+                    <button id="btnFecharModal" type="button" class="btn btn-link botao-filtro" data-dismiss="modal">Fechar</button>
+                    <button id="btnGravarModal" type="submit" class="btn btn-warning ripple botao-filtro ml-3">Salvar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        pesquisar = function (_id) {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("ObterResultado")',
+                data: {
+                    id: _id,
+                },
+                success: function (dados) {
+                    $('#divGrid').html(dados);
+                    $('#tblRelatorio').DataTable({
+                        "sPaginationType": "full_numbers",
+                        "iDisplayLength": 10,
+                        "lengthMenu": [[10, 25, 50], [10, 25, 50]],
+                        "bDestroy": true,
+                        "stateSave": false,
+                        "order": [[1, "desc"]],
+                        sDom: 'lrtip'
+                    });
+
+                    $("#pnlConteudo").removeClass("d-none");
+                },
+                error: function () {
+                    $.notifyError('Ocorreu um erro ao realizar a pesquisa.');
+                    return;
+                }
+            });
+
+            return false;
+        };
+
+        cadastrar = function () {
+            acao = 'cadastrar';
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("CadastrarExame")",
+                success: function (response) {
+
+                    framework.carregarModalSmall(response, "Cadastrar Resultado de Exame");
+
+                },
+                error: function () {
+                    $.notifyError('Ocorreu um erro.');
+                }
+            });
+
+            return false;
+        };
+
+        editar = function (_id) {
+            acao = 'editar';
+
+            $.ajax({
+                type: "GET",
+                data: { id: _id },
+                url: "@Url.Action("EditarExame")",
+                success: function (response) {
+
+                    framework.carregarModalSmall(response, "Cadastrar Resultado de Exame");
+
+                },
+                error: function () {
+                    $.notifyError('Ocorreu um erro.');
+                }
+            });
+
+            return false;
+        };
+
+        alterarStatus = function (_this) {
+            var checked = _this.checked;
+
+            if (checked) {
+                document.getElementById('chkFlagAtivo').checked = true;
+
+                $('#txtResultado').val('APROVADO');
+                $('#txtResultado').addClass('text-success');
+
+                $('#imgAprovado').removeClass('d-none');
+                $('#imgReprovado').addClass('d-none');
+            }
+            else {
+                document.getElementById('chkFlagAtivo').checked = false;
+
+                $('#txtResultado').val('REPROVADO');
+                $('#txtResultado').addClass('text-danger');
+
+                $('#imgAprovado').addClass('d-none');
+                $('#imgReprovado').removeClass('d-none');
+            }
+        };
+
+        @*salvar = function () {
+
+            var result = validar();
+            if (!result.success) {
+                $.notifyWarning("Existem dados inválidos ou não preenchidos.<br>" + result.mensagem);
+                return;
+            }
+
+            var form = $('#frmExame');
+            framework.submeterForm(form, '@Url.Action("SalvarExame")', function (response) {
+                if (response.success) {
+                    $.notifySuccess(response.message);
+
+                    framework.fecharModal();
+                    pesquisar(null);
+
+                } else {
+                    $.notifyWarning(response.message);
+                }
+            });
+
+
+            //return false;
+        };*@
+
+        validar = function () {
+            var result = {};
+            result.success = true;
+            result.mensagem = "";
+
+            if (!framework.valorValido($("#ddlMotoristaForm").val())) {
+                result.success = false;
+                result.mensagem += "<br>Informe o motorista.";
+            }
+
+            if (!framework.valorValido($("#txtCnh").val())) {
+                result.success = false;
+                result.mensagem += "<br>Informe a CNH.";
+            }
+
+            if (!framework.valorValido($("#txtCpf").val())) {
+                result.success = false;
+                result.mensagem += "<br>Informe o CPF.";
+            }
+
+            if (!framework.valorValido($("#ddlLaboratorioForm").val())) {
+                result.success = false;
+                result.mensagem += "<br>Informe o laboratório responsável.";
+            }
+
+            return result;
+        };
+
+        excluir = function (_id) {
+            acao = 'excluir';
+
+            $.ajax({
+                type: "GET",
+                data: { id: _id },
+                url: "@Url.Action("ExcluirExame")",
+                success: function (result) {
+                    if (result.success) {
+                        $.notifySuccess(result.message)
+                    } else {
+                        $.notifyWarning(result.message)
+                    }
+
+                    pesquisar(null);
+                },
+                error: function () {
+                    $.notifyError('Ocorreu um erro.');
+                }
+            });
+
+            return false;
+        };
+
+
+        pesquisar(null);
+    });
+
+    //$('#btnGravarModal').click(function (e) {
+    //    salvar();
+    //    //var nome = $('#ddlMotoristaForm option:selected').text();
+    //    //$('#hdNome').val(nome);
+
+    //    //$('#frmExame').submit();
+    //});
+
+    $('#btnPesquisar').click(function () {
+        var id = $('#ddlMotorista').val();
+        pesquisar(id);
+    });
+
+
+    $('#frmExame').submit(function (e) {
+
+        var result = validar();
+        if (!result.success) {
+            $.notifyWarning("Existem dados inválidos ou não preenchidos.<br>" + result.mensagem);
+            return false;
+        }
+
+        var nome = $('#ddlMotoristaForm option:selected').text();
+        var lab = $('#ddlLaboratorioForm option:selected').text();
+
+
+        $('#hdNome').val(nome);
+        $('#hdLaboratorio').val(lab);
+
+            var formdata = new FormData($('#frmExame')[0]);
+            $.ajax({
+                url: '@Url.Action("SalvarExame")',
+                type: 'POST',
+                data: formdata,
+                processData: false,
+                contentType: false
+            }).done(function (response) {
+
+                $.notifySuccess(response.message);
+
+                framework.fecharModal();
+                pesquisar(null);
+
+            });
+
+            return false;
+
+        });
+</script>

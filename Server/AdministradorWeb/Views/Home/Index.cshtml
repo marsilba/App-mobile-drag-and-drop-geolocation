@@ -1,0 +1,614 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/chartist.min.css" rel="stylesheet" />
+<style type="text/css">
+    .chartist-tooltip {
+        opacity: 0;
+        position: absolute;
+        margin: 20px 0 0 10px;
+        background: rgba(0, 0, 0, 0.8);
+        color: #FFF;
+        padding: 5px 10px;
+        border-radius: 4px;
+    }
+
+        .chartist-tooltip.tooltip-show {
+            opacity: 1;
+        }
+
+    .fonte-infow {
+        color: #696969;
+    }
+</style>
+
+
+<div id="pnlConteudo" class="card-body d-none">
+    <div class="form-row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">event_note</i>
+                    </div>
+                    <p class="card-category font-weight-bold">QUANTIDADE</p>
+                    <p class="card-category">Autuações</p>
+
+                </div>
+                <div class="card-footer">
+                    <h3 id="_totalOcorrencias" class="card-title" style="margin-left: auto;"></h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">attach_money</i>
+                    </div>
+                    <p class="card-category font-weight-bold">ARRECADAÇÃO</p>
+                    <p class="card-category">Valor Autuações</p>
+                </div>
+                <div class="card-footer">
+                    <h3 id="_totalOcorrenciasMensal" class="card-title" style="margin-left: auto;"></h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">attach_money</i>
+                    </div>
+                    <p class="card-category font-weight-bold">DENATRAN</p>
+                    <p class="card-category">Valor Devido</p>
+                </div>
+                <div class="card-footer">
+                    <h3 id="_totalDenatran" class="card-title" style="margin-left: auto;"></h3>
+                </div>
+            </div>
+        </div>
+        @*<div class="col-lg-2 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">attach_money</i>
+                    </div>
+                    <p class="card-category font-weight-bold">FUNSET</p>
+                    <p class="card-category">Valor Devido</p>
+                </div>
+                <div class="card-footer">
+                    <h3 id="_totalOcorrenciasSemanal" class="card-title" style="margin-left: auto;"></h3>
+                </div>
+            </div>
+        </div>*@
+        @*<div class="col-lg-2 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">attach_money</i>
+                    </div>
+                    <p class="card-category font-weight-bold">DETRAN</p>
+                    <p class="card-category">Valor Devido</p>
+                </div>
+                <div class="card-footer">
+                    <h3 id="_totalOcorrenciasHoje" class="card-title" style="margin-left: auto;"></h3>
+                </div>
+            </div>
+        </div>*@
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">attach_money</i>
+                    </div>
+                    <p class="card-category font-weight-bold">ÓRGAO AUTUADOR</p>
+                    <p class="card-category">Valor Devido</p>
+                </div>
+                <div class="card-footer">
+                    <h3 id="_totalOrgaoAutuador" class="card-title" style="margin-left: auto;"></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-6">
+            <div class="card card-chart">
+                <div class="card-header card-header-rose" data-header-animation="false">
+                    <div id="chartMensal" class="ct-chart" width="100%" height="100%"></div>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">Autuações Estaduais</h4>
+                    <p class="card-category">Ocorrências registradas em 2020</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-chart">
+                <div class="card-header card-header-warning" data-header-animation="false">
+                    <div id="chartSemanal" class="ct-chart" width="100%" height="100%"></div>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">Autuações Mensais</h4>
+                    <p id="_tempoAtendimento" class="card-category">Ocorrências registradas em 2020</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row" style="margin-top: -20px;">
+        <div class="card">
+            <div class="card-header card-header-success card-header-icon">
+                <h4 class="card-title header-icons">Mapa de Autuações</h4>
+            </div>
+            <div class="card-body">
+                <div id="mapa" style="width:100%; height:500px; border:0px; border:0px; overflow: auto; margin-top: 5px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            carregarDadosDashboard();
+        });
+
+        carregarDadosDashboard = function () {
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DashBoard")',
+                success: function (dash) {
+
+                    carregarLegendasGraficos(dash);
+                    carregarLegendasMapa(dash);
+
+                    var _labels;
+                    var _series;
+                    var _element;
+
+                    for (var i = 0; i < dash.graficos.length; i++) {
+                        _element = document.getElementById(dash.graficos[i].chartName);
+                        _labels = dash.graficos[i].labels;
+                        _series = dash.graficos[i].series;
+
+                        if (dash.graficos[i].type == 'bar') {
+                            chartBar(_element, _labels, _series);
+                        } else {
+                            chartLine(_element, _labels, _series);
+                        }
+                    }
+
+                    initMap(dash);
+                },
+                error: function () {
+                    $.notifyError('Ocorreu um erro ao realizar a pesquisa.');
+                    return;
+                }
+            });
+        };
+
+        carregarLegendasGraficos = function (_dash) {
+            $('#_totalOcorrencias').html(_dash.totalOcorrencias.toLocaleString('pt-BR'));
+            $('#_totalOcorrenciasMensal').html('R$ ' + _dash.valorBruto.toLocaleString('pt-BR'));
+            $('#_totalOcorrenciasSemanal').html('R$ ' + _dash.valorFunset.toLocaleString('pt-BR'));
+            $('#_totalOcorrenciasHoje').html('R$ ' + _dash.valorDetran.toLocaleString('pt-BR'));
+            $('#_totalDenatran').html('R$ ' + _dash.valorDenatran.toLocaleString('pt-BR'));
+            $('#_totalOrgaoAutuador').html('R$ ' + _dash.valorOrgaoAutuador.toLocaleString('pt-BR'));
+        };
+
+        carregarLegendasMapa = function (_dash) {
+            var tipoOcorrencia;
+            var totalOcorrencias;
+
+            for (var i = 0; i < _dash.mapas.length; i++) {
+                tipoOcorrencia = _dash.mapas[i].tipoOcorrencia;
+                totalOcorrencias = _dash.mapas[i].quantidadeOcorrencias;
+
+                if (tipoOcorrencia == 'ATENDIMENTO')
+                    $('#_totalOcorrenciasAtendimento').html(totalOcorrencias.toLocaleString('pt-BR'));
+
+                else if (tipoOcorrencia == 'CMA/GCM')
+                    $('#_totalOcorrenciasCma').html(totalOcorrencias.toLocaleString('pt-BR'));
+
+                else if (tipoOcorrencia == 'CRIMINAL')
+                    $('#_totalOcorrenciasCriminal').html(totalOcorrencias.toLocaleString('pt-BR'));
+
+                else if (tipoOcorrencia == 'ORDEM PÚBLICA')
+                    $('#_totalOcorrenciasOrdemPublica').html(totalOcorrencias.toLocaleString('pt-BR'));
+
+                else if (tipoOcorrencia == 'TRÂNSITO')
+                    $('#_totalOcorrenciasTransito').html(totalOcorrencias.toLocaleString('pt-BR'));
+
+                else if (tipoOcorrencia == 'OUTROS')
+                    $('#_totalOcorrenciasOutros').html(totalOcorrencias.toLocaleString('pt-BR'));
+            }
+        };
+
+        chartBar = function (_chart, _arrayLabels, _arraySeries) {
+            var seriesChart = {
+                labels: _arrayLabels,
+                series: [_arraySeries]
+            };
+
+            var optionsChart = {
+                axisX: {
+                    showGrid: false,
+                },
+                axisY: {
+                    labelOffset: {
+                        x: 6,
+                        y: 5
+                    }
+                },
+                plugins: [
+                  Chartist.plugins.tooltip()
+                ]
+            };
+
+            var chart = Chartist.Bar(_chart, seriesChart, optionsChart);
+            md.startAnimationForBarChart(chart);
+        };
+
+        chartLine = function (_chart, _arrayLabels, _arraySeries) {
+            seriesChart = {
+                labels: _arrayLabels,
+                series: [_arraySeries]
+            };
+
+            optionsChart = {
+                showPoint: true,
+                axisX: {
+                    showGrid: false,
+                    labelOffset: {
+                        x: -3,
+                        y: 0
+                    }
+                },
+                axisY: {
+                    labelOffset: {
+                        x: 6,
+                        y: 5
+                    }
+                },
+                plugins: [
+                  Chartist.plugins.tooltip()
+                ]
+            }
+
+            var chartLine = new Chartist.Line(_chart, seriesChart, optionsChart);
+            md.startAnimationForLineChart(chartLine);
+        };
+
+        initMap = function (_dash) {
+            var mapa = new google.maps.Map(document.getElementById('mapa'), {
+                center: { lat: -15.83, lng: -47.86 },
+                zoom: 5,
+                streetViewControl: false,
+                scrollwheel: true,
+                clickableIcons: false,
+                mapTypeControl: true,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] },
+                {
+                    "featureType": "all",
+                    "elementType": "labels.text.fill",
+                    "stylers": [
+                        {
+                            "color": "#7c93a3"
+                        },
+                        {
+                            "lightness": "-10"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "administrative.country",
+                    "elementType": "geometry",
+                    "stylers": [
+                        {
+                            "visibility": "on"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "administrative.country",
+                    "elementType": "geometry.stroke",
+                    "stylers": [
+                        {
+                            "color": "#a0a4a5"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "administrative.province",
+                    "elementType": "geometry.stroke",
+                    "stylers": [
+                        {
+                            "color": "#62838e"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "landscape",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        {
+                            "color": "#dde3e3"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "landscape.man_made",
+                    "elementType": "geometry.stroke",
+                    "stylers": [
+                        {
+                            "color": "#3f4a51"
+                        },
+                        {
+                            "weight": "0.30"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "visibility": "simplified"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.attraction",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.business",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "visibility": "on"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.government",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.park",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.place_of_worship",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.school",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "poi.sports_complex",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "saturation": "-100"
+                        },
+                        {
+                            "visibility": "on"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "geometry.stroke",
+                    "stylers": [
+                        {
+                            "visibility": "on"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        {
+                            "color": "#bbcacf"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "geometry.stroke",
+                    "stylers": [
+                        {
+                            "lightness": "0"
+                        },
+                        {
+                            "color": "#bbcacf"
+                        },
+                        {
+                            "weight": "0.50"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "labels",
+                    "stylers": [
+                        {
+                            "visibility": "on"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "labels.text",
+                    "stylers": [
+                        {
+                            "visibility": "on"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway.controlled_access",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        {
+                            "color": "#ffffff"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway.controlled_access",
+                    "elementType": "geometry.stroke",
+                    "stylers": [
+                        {
+                            "color": "#a9b4b8"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.arterial",
+                    "elementType": "labels.icon",
+                    "stylers": [
+                        {
+                            "invert_lightness": true
+                        },
+                        {
+                            "saturation": "-7"
+                        },
+                        {
+                            "lightness": "3"
+                        },
+                        {
+                            "gamma": "1.80"
+                        },
+                        {
+                            "weight": "0.01"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "transit",
+                    "elementType": "all",
+                    "stylers": [
+                        {
+                            "visibility": "off"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "geometry.fill",
+                    "stylers": [
+                        {
+                            "color": "#a3c7df"
+                        }
+                    ]
+                }
+                ]
+            });
+
+            var bounds = new google.maps.LatLngBounds();
+
+            var markers = [];
+            var latitude;
+            var longitude;
+            var contentString;
+            var infowindow = new google.maps.InfoWindow();
+
+            var icon = {
+                url: '../images/hackatran/marker04.png',
+                scaledSize: new google.maps.Size(38, 45)
+            }
+
+            for (var i = 0; i < _dash.mapas.length; i++) {
+                latitude = parseFloat(_dash.mapas[i].latitude);
+                longitude = parseFloat(_dash.mapas[i].longitude);
+
+                var markerLatlng = new google.maps.LatLng(latitude, longitude);
+                var title = _dash.mapas[i].nome;
+
+                contentString =
+                    '<div id="content" class="fonte-infow">' +
+                    '<div id="bodyContent fonte-infow">' +  
+                    '<p class="text-center font-weight-bold"><b>AUTUAÇÕES ' + _dash.mapas[i].uf + '</b></p>' +
+                    '<p>Quant: <span class="font-weight-bold">' + _dash.mapas[i].quantidade.toLocaleString('pt-BR') + '</span></p>' +
+                    '<p>ARRECADAÇÃO BRUTA: <span class="font-weight-bold">R$ ' + _dash.mapas[i].valorBruto.toLocaleString('pt-BR') + '</span></p>' +
+                    '<p>DENATRAN: <span class="font-weight-bold">R$ ' + _dash.mapas[i].valorDenatran.toLocaleString('pt-BR') + '</span></p>' +
+                    '<p>DETRAN: <span class="font-weight-bold">R$ ' + _dash.mapas[i].valorDetran.toLocaleString('pt-BR') + '</span></p>' +
+                    '<p>FUNSET: <span class="font-weight-bold">R$ ' + _dash.mapas[i].valorFunset.toLocaleString('pt-BR') + '</span></p>' +
+                    '<p>ÓRGÃO AUTUADOR: <span class="font-weight-bold">R$ ' + _dash.mapas[i].valorOrgaoAutuador.toLocaleString('pt-BR') + '</span></p>' +
+                    '</div></div > ';
+
+                var iwContent = contentString;
+                createMarker(markerLatlng, title, iwContent);
+            }
+
+
+
+            function createMarker(latlon, title, iwContent) {
+                var marker = new google.maps.Marker({
+                    position: latlon,
+                    title: title,
+                    map: mapa,
+                    icon: icon,
+                });
+
+                google.maps.event.addListener(marker, 'click', function () {
+                    infowindow.setContent(iwContent);
+                    infowindow.open(mapa, marker);
+                });
+
+                bounds.extend(marker.position);
+            }
+
+            mapa.fitBounds(bounds);
+
+            $('#pnlConteudo').removeClass('d-none');
+        }
+
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzvYG2MAc1kx8Ql72tO4UWOJMeIeVSQLw&libraries=visualization"></script>
+    <script type="text/javascript" src="~/js/chartist.min.js"></script>
+    <script type="text/javascript" src="~/js/chartist-plugin-tooltip.js"></script>
+    <script type="text/javascript" src="~/js/chartist-plugin-pointlabels.js"></script>
+
+}

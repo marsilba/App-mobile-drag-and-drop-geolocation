@@ -1,0 +1,250 @@
+﻿@model AdministradorWeb.Repositorio.HackatranVeiculo
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/css/upload-file.css" rel="stylesheet" />
+<style type="text/css">
+    .qr-code {
+        top: 2px;
+    }
+
+    .pac-container {
+        z-index: 10000 !important;
+    }
+
+    form-control text-uppercase ui-autocomplete-input {
+        z-index: 10000 !important;
+    }
+
+    .bootstrap-datetimepicker-widget.dropdown-menu.bottom {
+        top: 26px !important;
+    }
+</style>
+
+
+<div id="divFiltro" class="card">
+    <div class="card-header card-header-success card-header-icon">
+        <div class="card-icon">
+            <i class="material-icons">filter_list</i>
+        </div>
+        <h4 class="card-title header-icons">Filtro</h4>
+    </div>
+
+    <div class="card-body">
+        <div class="col-md-12">
+            <div class="form-row">
+                <div class="col-md-3">
+                    <label for="ddlPlaca">Placas dos Veículos</label>
+                    @Html.DropDownList("ddlPlaca", new SelectList(@ViewBag.Placas, "Value", "Text"), "Selecione a Placa", new { @class = "form-control seleciona" })
+                </div>
+                <div class="col-md-2 ml-5">
+                    <button id="btnPesquisar" class="btn btn-warning ripple botao-filtro">Pesquisar</button>
+                    <button id="btnIncluir" class="btn btn-warning botao-filtro" onclick="javascript: cadastrar();">Incluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="pnlConteudo" class="pt-1 d-none">
+    <span id="divGrid"></span>
+</div>
+
+<div class="modal" id="_modal" role="dialog" aaria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div id="_modal_dialog" class="modal-dialog mt-3">
+        <div class="modal-content">
+            @using (Html.BeginForm("Salvar", "Veiculo", FormMethod.Post, new { @class = "form", role = "form", id = "frmVeiculo", onkeydown = "return event.key != 'Enter';" }))
+            {
+                <div class="card-header bg-success text-white text-center text-uppercase">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title font-weight-bold" id="_modal_title"></h5>
+                </div>
+                <div class="modal-body" id="_modal_body"></div>
+                <div class="modal-footer">
+                    <button id="btnFecharModal" type="button" class="btn btn-link botao-filtro" data-dismiss="modal">Fechar</button>
+                    <button id="btnGravarModal" type="submit" class="btn btn-warning ripple botao-filtro ml-3">Salvar</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        pesquisar = function (_placa) {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("Pesquisar")',
+                data: {
+                    placa: _placa,
+                },
+                success: function (dados) {
+                    $('#divGrid').html(dados);
+                    $('#tblRelatorio').DataTable({
+                        "sPaginationType": "full_numbers",
+                        "iDisplayLength": 10,
+                        "lengthMenu": [[10, 25, 50], [10, 25, 50]],
+                        "bDestroy": true,
+                        "stateSave": false,
+                        "order": [[1, "desc"]],
+                        sDom: 'lrtip'
+                    });
+
+                    $("#pnlConteudo").removeClass("d-none");
+                },
+                error: function () {
+                    $.notifyError('Ocorreu um erro ao realizar a pesquisa.');
+                    return;
+                }
+            });
+
+            return false;
+        };
+
+        cadastrar = function () {
+            acao = 'cadastrar';
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("Cadastrar")",
+                success: function (response) {
+
+                    framework.carregarModalSmall(response, "Cadastrar Veículo");
+
+                },
+                error: function () {
+                    $.notifyError('Ocorreu um erro.');
+                }
+            });
+
+            return false;
+        };
+
+        validar = function () {
+            var result = {};
+            result.success = true;
+            result.mensagem = "";
+
+            if (!framework.valorValido($("#txtNome").val())) {
+                result.success = false;
+                result.mensagem += "<br>Informe o motorista.";
+            }
+
+            if (!framework.valorValido($("#txtCnh").val())) {
+                result.success = false;
+                result.mensagem += "<br>Informe a CNH.";
+            }
+
+            if (!framework.valorValido($("#txtPlaca").val())) {
+                result.success = false;
+                result.mensagem += "<br>Informe a placa.";
+            }
+
+            if (!framework.valorValido($("#txtPeso").val())) {
+                result.success = false;
+                result.mensagem += "<br>Informe o peso (t) do veículo.";
+            }
+
+            if (!framework.valorValido($("#txtComprimento").val())) {
+                result.success = false;
+                result.mensagem += "<br>Informe o comprimenro (m) do veículo.";
+            }
+
+            if (!framework.valorValido($("#txtAltura").val())) {
+                result.success = false;
+                result.mensagem += "<br>Informe a altura (m) do veículo.";
+            }
+
+            if (!framework.valorValido($("#txtLargura").val())) {
+                result.success = false;
+                result.mensagem += "<br>Informe a largura (m) do veículo.";
+            }
+
+            return result;
+        };
+
+        editar = function (_id) {
+            acao = 'editar';
+
+            $.ajax({
+                type: "GET",
+                data: { id: _id },
+                url: '@Url.Action("Editar")',
+                success: function (response) {
+
+                    framework.carregarModalSmall(response, "Cadastrar Veículo");
+
+                },
+                error: function () {
+                    $.notifyError('Ocorreu um erro.');
+                }
+            });
+
+            return false;
+        };
+
+        excluir = function (_id) {
+            acao = 'excluir';
+
+            $.ajax({
+                type: "GET",
+                data: { id: _id },
+                url: "@Url.Action("Excluir")",
+                success: function (result) {
+                    if (result.success) {
+                        $.notifySuccess(result.message)
+                    } else {
+                        $.notifyWarning(result.message)
+                    }
+
+                    pesquisar(null);
+                },
+                error: function () {
+                    $.notifyError('Ocorreu um erro.');
+                }
+            });
+
+            return false;
+        };
+
+        pesquisar(null);
+
+    });
+
+    $('#btnPesquisar').click(function () {
+        var placa = $('#ddlPlaca').val();
+        pesquisar(placa);
+    });
+
+    $('#frmVeiculo').submit(function (e) {
+
+        var result = validar();
+        if (!result.success) {
+            $.notifyWarning("Existem dados inválidos ou não preenchidos.<br>" + result.mensagem);
+            return false;
+        }
+
+        var formdata = new FormData($('#frmVeiculo')[0]);
+        $.ajax({
+            url: '@Url.Action("Salvar")',
+            type: 'POST',
+            data: formdata,
+            processData: false,
+            contentType: false
+        }).done(function (response) {
+
+            $.notifySuccess(response.message);
+
+            framework.fecharModal();
+            pesquisar(null);
+
+        });
+
+        return false;
+
+    });
+</script>

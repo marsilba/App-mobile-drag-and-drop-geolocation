@@ -1,0 +1,100 @@
+﻿<div id="divSideBar" class="sidebar fundo-menu" data-color="orange" data-background-color="black">
+    <div class="logo ml-4 text-white d-inline-flex">
+    </div>
+    <div class="sidebar-wrapper">
+        <div class="user">
+            <div class="photo">
+                <img src="~/images/usuario/2.jpg" />
+            </div>
+            <div class="user-info">
+                <a data-toggle="collapse" href="#collapseExample" class="username">
+                    <span class="font-weight-bold">
+                        @UsuarioLogado.Nome
+                        <b class="caret"></b>
+                    </span>
+                </a>
+                <div class="collapse show" id="collapseExample">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link">
+
+                                <span class="sidebar-normal">
+                                    <span style="font-weight: bold;">Matrícula:</span> @UsuarioLogado.Matricula
+                                </span>
+                                <span class="sidebar-normal">
+                                    <span style="font-weight: bold;">Perfil:</span> @UsuarioLogado.Perfil
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        @*MENU*@
+        <ul id="menu" class="nav">
+
+            @if (UsuarioLogado.TipoLogin == 1)
+            {
+                <li class="nav-item nav-menu financeiro">
+                    <a class="nav-link" href="@Url.Action("Index", "Home")">
+                        <i class="material-icons">dashboard</i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item nav-menu financeiro">
+                    <a class="nav-link" href="@Url.Action("Index", "Relatorio")">
+                        <i class="material-icons">event_note</i>
+                        <p>Relatório</p>
+                    </a>
+                </li>
+                <li class="nav-item nav-menu financeiro">
+                    <a class="nav-link" href="@Url.Action("Index", "Boleto")" target="_blank">
+                        <i class="material-icons">monetization_on</i>
+                        <p>Gerar Boleto</p>
+                    </a>
+                </li>
+            }
+
+            @if (UsuarioLogado.TipoLogin == 2)
+            {
+                <li class="nav-item nav-menu exame">
+                    <a class="nav-link" href="@Url.Action("Index", "Laboratorio")">
+                        <i class="material-icons">pin_drop</i>
+                        <p>Credenciamento do Lab</p>
+                    </a>
+                </li>
+                <li class="nav-item nav-menu exame">
+                    <a class="nav-link" href="@Url.Action("ResultadoExame", "Laboratorio")">
+                        <i class="material-icons">assignment_turned_in</i>
+                        <p>Resultado de Exames</p>
+                    </a>
+                </li>
+            }
+
+            @if (UsuarioLogado.TipoLogin == 3)
+            {
+                <li class="nav-item nav-menu eat">
+                    <a class="nav-link" href="@Url.Action("Index", "RotaAET")">
+                        <i class="material-icons">pin_drop</i>
+                        <p>Obras de Arte Especiais</p>
+                    </a>
+                </li>
+                <li class="nav-item nav-menu eat">
+                    <a class="nav-link" href="@Url.Action("Index", "Veiculo")">
+                        <i class="material-icons">directions_car</i>
+                        <p>Veículos</p>
+                    </a>
+                </li>
+            }
+
+            <li class="nav-item nav-menu d-none">
+                <a class="nav-link" href="@Url.Action("Logout", "Home")">
+                    <i class="material-icons">exit_to_app</i>
+                    <p>Logout</p>
+                </a>
+            </li>
+        </ul>
+        @*MENU*@
+    </div>
+    <div class="sidebar-background fundo-menu"></div>
+</div>

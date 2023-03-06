@@ -1,0 +1,86 @@
+body{overflow-x:hidden;}
+.content{position:relative;}
+.btn-green{background-color: #14b24b !important; color:#fff !important; border:none !important;}
+
+/* fullscreen mapa */
+#themapfilter{width:70%;}
+.alphabar{background:rgba(255,255,255,0.8); width:30%; height:100%; position:absolute; bottom:0px; right:0px; overflow-y:auto;}
+.alphabar h4{color:#fff; padding:10px; margin:0px; font-weight:bold; background:#ff9800;}
+.alphabar .pindetalhes{border-bottom: 1px solid #e0e0e0; overflow: hidden; width: 100%; float: left; padding: 10px 0px;}
+.alphabar .pindetalhes:first-of-type{border-top: 1px solid #e0e0e0;}
+.alphabar .pinthumb{float:left; color:#3f3f3f; text-align:center; padding:17px 10px 8px 10px;}
+.alphabar .pinthumb span:first-of-type{font-size:20pt; display:block; font-weight: bold;}
+.alphabar .pinthumb span:last-of-type{font-size:10pt; display:block; font-weight: normal;}
+.alphabar .pindesc{float:left; color:#3f3f3f; text-align:left; border:none;}
+.alphabar .pindesc span{display:block; width:100%; padding:0px 10px; font-size: 10pt; text-transform: uppercase; font-weight: normal;}
+.alphabar .pindesc i{top: 7px; position: relative; color:#ccc;}
+.alphabar #opcoessanfona{color:#3f3f3f; text-transform:uppercase; font-weight:bold;}
+
+/* div fullwidth centralizado */
+.fullwidthcenter{text-align:center; width:100%;}
+.fullwidthcenter .dropdown.bootstrap-select{margin:auto;}
+
+.main-panel>.content {
+    min-height: calc(100vh - 126px);
+}
+
+.pagination>.page-item.active>a, .pagination>.page-item.active>a:focus, .pagination>.page-item.active>a:hover, .pagination>.page-item.active>span, .pagination>.page-item.active>span:focus, .pagination>.page-item.active>span:hover {
+    background-color: #4487bd;
+    border-color: #4487bd;
+}
+
+.form-control, .is-focused .form-control {
+    background-image: linear-gradient(to top,#4487bd 2px,rgba(156,39,176,0) 2px),linear-gradient(to top,#d2d2d2 1px,rgba(210,210,210,0) 1px);
+}
+
+.bootstrap-select .dropdown-item.active {
+    background: #4487bd;
+}
+
+.dropdown-menu .dropdown-item:focus, .dropdown-menu .dropdown-item:hover, .dropdown-menu a:active, .dropdown-menu a:focus, .dropdown-menu a:hover {
+    box-shadow: 0 4px 20px 0 rgba(0,0,0,.14), 0 7px 10px -5px rgba(76, 175, 80, 0.4);
+    background-color: #4487bd;
+}
+
+.selectpicker + button {
+    background: #fff;
+    border: #aaa 1px solid;
+    box-shadow: transparent;
+    border-radius: 4px;
+    color: #666;
+}
+
+.selectpicker + button:hover {
+    color: #828282;
+    background-color: #f9f9f9;
+    border-color: #c3c3c3;
+    box-shadow: none;
+}
+
+.collapse-links a {
+    color: #666;
+}
+
+.collapse-links .btn.btn-fab.btn-round, .btn.btn-just-icon.btn-round {
+    border-radius: 10%;
+}
+
+/* Ripple effect */
+.ripple {
+    background-position: center;
+    transition: background 0.8s;
+  }
+  .ripple:hover {
+    background: #4487bd radial-gradient(circle, transparent 1%, #4487bd 1%) center/15000%;
+  }
+  .ripple:active {
+    background-color: #7cd47f;
+    background-size: 100%;
+    transition: background 0s;
+  }
+
+  /* datetimepicker */
+
+  .bootstrap-datetimepicker-widget table td.active>div{background-color:#7cd47f;color:#fff;box-shadow:0 4px 20px 0 rgba(0,0,0,.14),0 7px 10px -5px rgba(156,39,176,.4)}
+
+  .bootstrap-datetimepicker-widget table td span.active{background-color:#7cd47f;color:#fff}

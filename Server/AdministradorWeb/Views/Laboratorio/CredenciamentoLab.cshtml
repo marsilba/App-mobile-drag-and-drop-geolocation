@@ -1,0 +1,89 @@
+﻿@model AdministradorWeb.Repositorio.HackatranLaboratorio
+
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("Salvar", "Laboratorio", FormMethod.Post, new { @class = "form", role = "form", id = "frmLaboratorio" }))
+{
+    @Html.HiddenFor(x => x.Id)
+    @if (Model.Id != null)
+    {
+        @Html.HiddenFor(x => x.Nome)
+    }
+    <div class="card">
+        <div class="card-header card-header-success card-header-icon">
+            <div class="card-icon">
+                <i class="material-icons">pin_drop</i>
+            </div>
+            <h4 class="card-title header-icons"></h4>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="col-md-4">
+                    <div class="form-row justify-content-center">
+                        <div class="col-md-12">
+                            <label for="txtNome">Nome do Laboratório</label>
+                            @if (Model.Id == null)
+                            {
+                                @Html.TextBoxFor(x => x.Nome, new { @id = "txtNome", @class = "form-control text-uppercase" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(x => x.Nome, new { @id = "txtNome", @class = "form-control text-uppercase", @disabled = true })
+                                @*@Html.DropDownListFor(x => x.Id, Model.Laboratorios, "", new { id = "ddlLaboratorios", @style = "width: 100%", @class = "form-control seleciona", @disabled = true })*@
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-row justify-content-center">
+                        <div class="col-md-12 pt-4">
+                            <label for="txtEndereco">Endereço</label>
+                            @Html.TextBoxFor(x => x.Endereco, new { @id = "txtEndereco", @class = "form-control text-uppercase" })
+                        </div>
+                    </div>
+
+                    <div class="form-row justify-content-center pt-4">
+                        <div class="col-md-12">
+                            <label for="txtHorario">Horário de Atendimento</label>
+                            @Html.TextBoxFor(x => x.Horario, new { @id = "txtHorario", @class = "form-control text-uppercase" })
+                        </div>
+                    </div>
+
+                    <div class="form-row pt-5 justify-content-center">
+                        <div class="col-md-6">
+                            <label for="txtLatitude">Latitude</label>
+                            @Html.TextBoxFor(x => x.Latitude, new { @id = "txtLatitude", @class = "form-control text-uppercase", @readonly = "readonly" })
+                        </div>
+                        <div class="col-md-6">
+                            <label for="txtLongitude">Longitude</label>
+                            @Html.TextBoxFor(x => x.Longitude, new { @id = "txtLongitude", @class = "form-control text-uppercase", @readonly = "readonly" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div id="map" style="width:100%; height:500px; border:0px; border:0px; overflow: auto; margin-top: 5px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        latitudeMarker = '@Model.Latitude';
+        longitudeMarker = '@Model.Longitude';
+
+        initMap();
+    });
+</script>

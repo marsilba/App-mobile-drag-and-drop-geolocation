@@ -1,0 +1,49 @@
+﻿
+/*input[type="radio"] {
+    display: none;
+}*/
+
+/*INCLUIR NOME RADIO QUE RECEBERA O LAYOUT*/
+/*****************************************/
+
+input[name=radReptSelecionado] {
+    display: none;
+}
+
+/*****************************************/
+
+
+input[type="radio"] + label {
+    color: red;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+input[type="radio"] + label span {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin: -1px 4px 0 0;
+    vertical-align: middle;
+    cursor: pointer;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
+input[type="radio"] + label span {
+    background-color: #ccc;
+    border: 2px solid #808080;
+}
+
+input[type="radio"]:checked + label span {
+    background-color: #5CB85C;
+    border: 1px solid #808080;
+}
+
+input[type="radio"] + label span,
+input[type="radio"]:checked + label span {
+    -webkit-transition: background-color 0.2s linear;
+    -o-transition: background-color 0.2s linear;
+    -moz-transition: background-color 0.2s linear;
+    transition: background-color 0.2s linear;
+}

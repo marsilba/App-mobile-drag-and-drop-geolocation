@@ -1,0 +1,29 @@
+﻿.alert-minimalist {
+    /*background: rgba(10,23,55,0.2);*/
+    background: rgba(23, 162, 184, 0.2);
+    border-radius: 3px;
+    color: rgb(149, 149, 149);
+    padding: 10px;
+}
+
+.alert-minimalist > [data-notify="icon"] {
+    height: 50px;
+    margin-right: 12px;
+}
+
+.alert-minimalist > [data-notify="title"] {
+    color: white;
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.alert-minimalist > [data-notify="message"] {
+    font-size: 80%;
+    color: white;
+}
+
+.close {
+    right: 5px !important;
+    top: 10px !important;
+}

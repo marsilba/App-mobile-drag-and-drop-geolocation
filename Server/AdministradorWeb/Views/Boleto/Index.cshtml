@@ -1,0 +1,14 @@
+﻿@{ 
+    Layout = null;
+}
+<div style="padding-left: 20%; padding-right: 20%;">
+
+    <div id="divBoleto"></div>
+
+</div>
+<script type="text/javascript" src="~/js/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#divBoleto').load('@Url.Action("GerarBoleto")')
+    });
+</script>

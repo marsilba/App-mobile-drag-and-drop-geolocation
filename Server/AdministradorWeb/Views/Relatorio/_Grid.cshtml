@@ -1,0 +1,56 @@
+﻿@model List<AdministradorWeb.Repositorio.HackatranArrecadacao>
+
+<style type="text/css">
+    .grid-header {
+        font-size: 14px !important;
+    }
+
+    .grid-body {
+        font-size: 14px;
+    }
+</style>
+
+<div class="card">
+    <div class="card-header card-header-success card-header-icon">
+        <div class="card-icon">
+            <i class="material-icons">assignment</i>
+        </div>
+        <h4 class="card-title header-icons">Resultado da Pesquisa</h4>
+    </div>
+
+    <div class="card-body" style="font-size: small;">
+        <div class="material-datatables">
+            <table id="tblRelatorio" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th class="grid-header font-weight-bold text-center">UF</th>
+                        <th class="grid-header font-weight-bold w-25">ÓRGAO AUTUADOR</th>
+                        <th class="grid-header font-weight-bold w-25">DETRAN ARRECADAÇÃO</th>
+                        <th class="grid-header font-weight-bold text-center">QUANT</th>
+                        <th class="grid-header font-weight-bold text-center">VALOR BRUTO<br />R$</th>
+                        <th class="grid-header font-weight-bold text-center">FUNSEF<br />R$</th>
+                        <th class="grid-header font-weight-bold text-center">DETRAN<br />R$</th>
+                        <th class="grid-header font-weight-bold text-center">DENATRAN<br />R$</th>
+                        <th class="grid-header font-weight-bold text-center">ÓRGÃO AUTUADOR<br />R$</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr class="text-uppercase">
+                        <td class="grid-body text-center">@item.Uf</td>
+                        <td class="grid-body w-25">@item.OrgaoAutuador</td>
+                        <td class="grid-body w-25">@item.DetranArrecadacao</td>
+                        <td class="grid-body text-center">@item.Quantidade</td>
+                        <td class="grid-body text-center">@item.ValorBruto</td>
+                        <td class="grid-body text-center">@item.ValorFunset</td>
+                        <td class="grid-body text-center">@item.ValorDetran</td>
+                        <td class="grid-body text-center">@item.ValorDenatran</td>
+                        <td class="grid-body text-center">@item.ValorOrgaoAutuador</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

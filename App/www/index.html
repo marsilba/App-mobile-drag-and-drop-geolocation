@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+<link rel="stylesheet" href="fontawesome/css/font-awesome.min.css">	
+<script type="text/javascript" src="cordova.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key="></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+<div id="container">
+	<div id="mapa" style="width:100%; min-height:100%; position:absolute; z-index:1;"></div>
+	
+		<div class="header" >
+			<img id="logo-small" src="img/images.jpg">
+			<span style="color: #fff">Denatran<span style="color: #fff">Exames Toxicológicos</span></span>
+		</div>
+		
+		<div class="overlay">
+		<div class="window" id="overlay-linhabus">      
+			<h1 id="nomeLabCaixa"></h1>
+			<div class="row" style="padding-bottom: 5px; width: 90%;">        
+				<div class="rectangle-2" id="dadosLab"></div>				
+			</div>		
+		</div>
+  		</div>
+
+<div class="overlayConsulta"></div>
+
+<div class="row" id="telaConsulta" style="margin-top: 5em; position: absolute; width: 100%; height: auto; z-index: 999999; text-align: center; overflow: auto;">
+    <div class="window" id="overlay-linhabusConsulta">      
+      	<h1>Consulta exame</h1>
+      	<div class="row" style="padding-bottom: 5px; overflow: auto; width: 100%; height: auto; text-align: center;">        
+          <input id="cpfConsulta" type="number" name="cpfConsulta" value="" placeholder="CPF" style="background-image:url(img/person-icon.png); margin-top: 1em;">		
+		<div class="row" style="padding-bottom: 5px; overflow: auto; height: auto;">        
+			<button id="btnConsulta">Consultar</button>
+		</div>		       
+      	</div>		
+	</div>      
+</div>
+  
+<div class="overlayResultado">
+	<div class="topinfo" style="margin-top: 4em;">
+        <div class="col-4-sm" style="text-align: center; margin-top: 2em;">
+          	<img id="avatarUsuario" src="img/iconePessoa.fw.png">
+        </div>		 
+        <div class="col-7-sm" style="margin-left: 10px; color:#000; text-align: center;">
+			<h1 id="nomeUsuario" style="margin-bottom: -10px; margin-top: 15px; font-size: 15px; font-weight: bold;"></h1>
+			<span style="font-size: 10px;" id="cnhResultado"></span>
+			<span style="font-size: 10px;" id="labResultado"></span>          
+			<span style="font-size: 10px;" id="diaResultado"></span>          
+			<span style="font-size: 10px;"><img id="iconeResultado" src="img/aprovado.fw.png" width="200" height="245" alt=""/></span>          
+			<span style="font-size: 30px; font-weight: bold;" id="textoResultado">Aprovado</span></br>          
+			
+        </div>		  	  
+    </div>
+</div>
+  
+	<span id="icon2" class="circle-green" style="position: absolute; z-index:10; bottom:19%; right:5%;"><i class="fa fa-location-arrow" aria-hidden="true"></i></span>	
+	<span id="icon3" class="circle-green" style="position: absolute; z-index:10; bottom:8%; right:5%;"><i class="fa fa-address-card" aria-hidden="true"></i></span> 	
+	
+</div> <!-- fecha container -->
+
+<script>
+
+document.addEventListener("deviceready", function() {
+	
+var mapCanvas;
+var markers = [];
+var paraDragEnd;
+var objLab;
+var geocoder;
+var markersVisivel = [];
+
+  $('.marquee').marquee({
+    //speed in milliseconds of the marquee
+    duration: 5000,
+    //gap in pixels between the tickers
+    gap: 50,
+    //time in milliseconds before the marquee will start animating
+    delayBeforeStart: 0,
+    //'left' or 'right'
+    direction: 'left',
+    //true or false - should the marquee be duplicated to show an effect of continues flow
+    duplicated: true
+  });  
+  
+  $('.close').click(function(e){
+    $('.overlay').fadeToggle();
+    $('#overlay-linhabus').fadeToggle();		
+  });
+  
+  $('.overlay').click(function(e){
+    $('#overlay-linhabus').fadeOut();
+	$(this).fadeOut();	
+  });
+	
+$('.overlayConsulta').click(function(e){
+    $('#overlay-linhabusConsulta').fadeOut();
+	$(this).fadeOut();	
+  });	
+  
+  $('#ponto').click(function(e){
+    $('.overlay').fadeToggle();
+    $('#overlay-linhabus').fadeToggle();
+  });
+	
+	$('#btnConsulta').click(function(e){
+		
+	$('#overlay-linhabusConsulta').fadeOut();
+	$('.overlayConsulta').fadeOut();
+		
+	var campoCpf = $('#cpfConsulta').val();    
+	$.getJSON('http://busonline.com.br/api/exame/'+campoCpf, function(obj) {
+		
+		var nome = obj.nome;
+		var cnh = obj.cnh;
+		var cpf = obj.cpf;
+		var data = obj.data;
+		var lab = obj.laboratorio;
+		var resultado = obj.resultado;
+		var foto = obj.urlFoto;
+		
+		$("#avatarUsuario").attr("src", foto);
+		$('#nomeUsuario').html(nome);
+		$('#cnhResultado').html("CNH: "+cnh);
+		$('#labResultado').html(lab);
+		$('#diaResultado').html(data);
+				
+		if(resultado == true){
+			
+			$("#iconeResultado").attr("src", "img/aprovado.fw.png");
+			$('#textoResultado').html("Aprovado");
+			
+		}else{
+			
+			$("#iconeResultado").attr("src", "img/reprovado.fw.png");
+			$('#textoResultado').html("Reprovado");
+			
+		}
+						
+		$('.overlayResultado').fadeIn();
+			
+	})	
+	
+  });
+	
+	$('.overlayResultado').click(function(e){    
+		$(this).fadeOut();	
+  	});
+		
+function initialize() {
+		
+		var mapOptions = {
+			disableDefaultUI: true,
+			mapTypeId: 'roadmap',
+			zoom: 15,
+			clickableIcons: false,
+			styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }]}],
+     	};
+	 	
+				
+		montaMapa();			
+
+	function montaMapa(){
+
+	mapCanvas = new google.maps.Map(document.getElementById("mapa"), mapOptions);
+	geocoder = new google.maps.Geocoder;    
+				
+		var onSuccess = function(position) {       	
+			
+			mapCanvas.setCenter({lat:position.coords.latitude, lng:position.coords.longitude});
+			var latlng = {lat: position.coords.latitude, lng: position.coords.longitude};
+			geocodeLatLng(geocoder, mapCanvas);
+    	};
+    
+    function onError(error) {
+        alert('code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
+    }
+
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);			
+	  
+	}		
+    
+}
+	  
+initialize();	
+	
+///////////////////////////////////////////////////////////////////////////
+
+$('#icon2').click(function(){
+			
+		var onSuccess = function(position) {       	
+			
+			mapCanvas.setCenter({lat:position.coords.latitude, lng:position.coords.longitude});
+			var latlng = {lat: position.coords.latitude, lng: position.coords.longitude};
+			geocodeLatLng(geocoder, mapCanvas);
+    	};
+    
+    function onError(error) {
+        alert('code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
+    }
+
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+	
+	mapCanvas.setZoom(15);
+			
+})	  
+
+	$('#icon3').click(function(){	
+	
+		$('.overlayConsulta').fadeToggle();
+		$('#overlay-linhabusConsulta').fadeToggle();    
+		document.getElementById('cpfConsulta').value = '';
+		$("#cpfConsulta").focus();
+		
+	})
+	
+	
+	mapCanvas.addListener('dragstart', function() {	
+			
+	console.log('inicio drag');
+	deleteMarkers();
+						
+	}); // fecha dragstart	
+	
+	function setMapOnAll() {
+	  for (var i = 0; i < markers.length; i++) {
+		markers[i].setMap(null);
+	  }
+	}
+
+	function deleteMarkers() {
+	  setMapOnAll();
+	  markers = [];
+	}
+								
+	mapCanvas.addListener('dragend', function() {
+				
+		clearTimeout(paraDragEnd);
+		paraDragEnd = setTimeout(function(){					
+									
+		geocodeLatLng(geocoder, mapCanvas);												
+						
+		mapCanvas.addListener('dragstart', function() {	
+										
+			deleteMarkers();		
+						
+		}); // fecha dragstart				
+				
+		}, 1000); // fecha settimeout				
+				
+	}); // fecha dragend
+	
+	mapCanvas.addListener('drag', function() {
+				
+		clearTimeout(paraDragEnd);		
+				
+	});
+				
+	function geocodeLatLng(geocoder, mapCanvas) {
+	  var input = mapCanvas.getCenter().toUrlValue();
+	  var latlngStr = input.split(',', 2);
+	  var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+	  geocoder.geocode({'location': latlng}, function(results, status) {
+		if (status === google.maps.GeocoderStatus.OK) {
+		  if (results[1]) {
+			  
+			markersVisivel = [];
+			marker = '';
+			  
+			$.getJSON('http://busonline.com.br/api/labendereco', function(obj) {
+						
+			objLab = obj;
+			console.log('quant reg: '+objLab.length);
+			console.log(markers);
+			
+			for (i = 0; i < objLab.length; i++) { 
+				
+			var id = objLab[i].id;
+			var latLaboratorio = objLab[i].latitude;
+			var longLaboratorio = objLab[i].longitude;			
+							
+				console.log(objLab[i].latitude+'//'+objLab[i].longitude);			
+				
+				var lat1 = parseFloat(latlngStr[0]);
+				var lon1 = parseFloat(latlngStr[1]);
+				
+				console.log(parseFloat(latlngStr[0])+'//'+parseFloat(latlngStr[1]));
+								
+				var lat2 = parseFloat(objLab[i].latitude);
+				var lon2 = parseFloat(objLab[i].longitude);					
+			
+				var R = 6371; // Radius of the earth in km
+				var dLat = (lat2 - lat1) * Math.PI / 180;			 
+				var dLon = (lon2 - lon1) * Math.PI / 180;			  
+				p1 = (lat1 * Math.PI / 180);			  
+				p2 = (lat2 * Math.PI / 180);			  
+				var a = 
+					0.5 - Math.cos(dLat)/2 + 
+					Math.cos(p1) * Math.cos(p2) * 
+					(1 - Math.cos(dLon))/2;					
+				 			
+			  	var distanciaAproximada = R * 2 * Math.asin(Math.sqrt(a));			  		  			  
+			  	var distanciaAproximadaFormat = distanciaAproximada*1000;			  			  
+			  	var distFinal = Math.round(distanciaAproximadaFormat);								
+			  
+			  	if(distFinal <= 5000){ // tá no raio
+				
+					var latlngLab = {lat: parseFloat(latLaboratorio), lng: parseFloat(longLaboratorio)};			  
+
+					var marker = new google.maps.Marker({
+					  position: latlngLab,
+					  map: mapCanvas,					  
+					  id: i+1,
+					  numMarcador: i,
+					  icon: {						
+						url: "img/pin-ponto01.fw.png",
+						scaledSize: new google.maps.Size(40,45),						
+						}
+					});
+				  
+				  	markersVisivel.push(i);					
+				  
+			  	}else{
+				  
+					var latlngLab = {lat: parseFloat(latLaboratorio), lng: parseFloat(longLaboratorio)};			  	
+
+					var marker = new google.maps.Marker({
+					  position: latlngLab,
+					  map: mapCanvas,
+					  visible: false,
+					});				  
+			  }				
+				
+				google.maps.event.addListener(marker, 'click', idMarcador);
+				markers.push(marker);			  							  
+			}			  
+			  
+		  });		   
+			  				
+		}		
+	}
+		  
+	});			
+}
+				
+	function idMarcador(e) {		
+		
+		for (var j = 0; j < markersVisivel.length; j++) {			
+			
+			markers[markersVisivel[j]].setIcon({
+            url: "img/pin-ponto01.fw.png",
+			scaledSize: new google.maps.Size(40,45)
+       })
+					
+	}		
+		
+	$('.overlay').fadeToggle();
+    $('#overlay-linhabus').fadeToggle();
+    		
+		var numM = this.numMarcador;
+		
+		markers[numM].setIcon({
+            url: "img/pin-pontoactive.png",
+			scaledSize: new google.maps.Size(50,56)
+        })
+		
+		var endereco = objLab[numM].endereco;
+		var horario = objLab[numM].horario;
+		var nomeLab = objLab[numM].nome;		
+		
+		var montaPonto = '<strong><span id="endCaixa">'+endereco+'</span></br><span id="endCaixa01"></span></strong><br>Horário de Funcionamento:</br><span id="horaCaixa" style="font-size: 0.5em;">'+horario+'</span></br><span id="horaCaixa01"></span>';
+	
+	$("#nomeLabCaixa").html(nomeLab);
+	$("#dadosLab").html(montaPonto);	
+				
+	}		
+			
+	function criaPontosDragEnd(){
+	
+	var posicao = ['-22.901623, -43.105316','-22.903903, -43.103811','-22.906277, -43.106337','-22.907852, -43.109705','-22.902724, -43.115057'];
+
+		for(i=0; i<posicao.length; i++){
+
+		var latlngStr = posicao[i].split(',', 3);
+		var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+		var latFormat = parseFloat(latlngStr[0]);
+		var longFormat = parseFloat(latlngStr[1]);
+		var posFormat = latFormat+','+longFormat;
+
+		var marker = new google.maps.Marker({
+				position: latlng,
+				map: mapCanvas,				
+				id: i+1,
+				numMarcador: i,
+				icon: {						
+					url: "img/pin-ponto01.fw.png",
+					scaledSize: new google.maps.Size(40,45),											
+					}				
+				});
+
+			google.maps.event.addListener(marker, 'click', idMarcadorDrag);
+			
+			markers.push(marker);
+	}
+	
+} ///// fecha pontos dragend	
+	
+	function idMarcadorDrag(e) {		
+		
+		 for (var j = 0; j < markers.length; j++) {			
+			
+			markers[j].setIcon({
+            url: "img/pin-ponto01.fw.png",
+			scaledSize: new google.maps.Size(40,45)
+        })
+					
+	}
+	    
+	$('.overlay').fadeToggle();
+    $('#overlay-linhabus').fadeToggle();
+    		
+		var numM = this.numMarcador;
+		
+		markers[numM].setIcon({
+            url: "img/pin-pontoactive.png",
+			scaledSize: new google.maps.Size(50,56)
+        })
+		
+		var endereco = objLab[numM].endereco;
+		var horario = objLab[numM].horario;
+		var nomeLab = objLab[numM].nome;				
+	
+		var montaPonto = '<strong><span id="endCaixa">'+endereco+'</span></br><span id="endCaixa01"></span></strong><br>Horário de Funcionamento:</br><span id="horaCaixa" style="font-size: 0.5em;">'+horario+'</span></br><span id="horaCaixa01"></span>';
+	
+	$("#nomeLabCaixa").html(nomeLab);
+	$("#dadosLab").html(montaPonto);		
+				
+	}
+	
+}); // fecha deviceready
+	  
+</script>
+</body>
+</html>

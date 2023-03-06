@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+<link rel="stylesheet" href="fontawesome/css/font-awesome.min.css">
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>-->
+	
+<script type="text/javascript" src="cordova.js"></script>
+<!--<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=geometry"></script>-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzvYG2MAc1kx8Ql72tO4UWOJMeIeVSQLw"></script>
+	
+<!--<script src="js/jquery.mask.js"></script>-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+
+<style>
+html, body{height:100%;}
+body{background:#ccc; margin:0px; padding:0px; text-align:center; font-family:Open Sans, sans-serif; color:#fff; font-weight:300; letter-spacing:1px; text-transform:uppercase; font-size:9pt;}
+div{white-space:nowrap;}
+a{color:#fff; text-decoration:none;}
+#container{width:100%; height:100%; min-height:100%; position:relative;}
+#news{width:100%; height:30px; background:#444444; line-height:30px;}
+#news .marquee{width:100%; overflow:hidden;}
+#news span{background:#ed491d; width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:5px; margin-left:5px;}
+#ponto{width:100%; height:90px; background:#4f90b8; -webkit-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); -moz-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3);}
+#linhabus{width:100%; height:90px; background:#5bb84f; -webkit-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); -moz-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3);}
+#ponto .rectangle-1{width:10%; height:100%; background:#437b9d; float:left;}
+#ponto .rectangle-2{width:45%; height:100%; float:left;}
+#ponto .rectangle-3{width:22%; height:100%; background:#437b9d; float:left; margin-right:1%;}
+#ponto .rectangle-4{width:22%; height:100%; background:#437b9d; float:left;}
+#linhabus .rectangle-1{width:10%; height:100%; background:#4d9d43; float:left;}
+#linhabus .rectangle-2{width:45%; height:100%; float:left;}
+#linhabus .rectangle-3{width:22%; height:100%; background:#4d9d43; float:left; margin-right:1%;}
+#linhabus .rectangle-4{width:22%; height:100%; background:#4d9d43; float:left;}
+#ponto div, #linhabus div{position:relative;}
+.rectangle-1 a{display:block; height:auto; width:100%; vertical-align:center; color:#fff; padding:34px 0; font-size: 12pt;}
+.rectangle-2 {width:80%; font-size:10pt; padding:10px; white-space: normal; text-align: left; font-size: 0.8em;}
+#nomeLabCaixa{white-space: normal};
+.rectangle-2 a:last-child{width:100%;}
+.rectangle-3 i{display:block; font-size:22pt; padding:8px 0px;}
+.rectangle-3 a:first-child{display:block; width:100%;}
+.rectangle-3 a:last-child{display:block; width:100%; font-size:16pt; margin-top:-5px;}
+.rectangle-4 i{display:block; font-size:22pt; padding:8px 0px;}
+.rectangle-4 a:first-child{display:block; width:100%;}
+.rectangle-4 a:last-child{display:block; width:100%; font-size:16pt; margin-top:-5px;}
+.circle-green{position:absolute; right:10px; border-radius:50%; border:4px solid #f1ac33; width:50px; height:50px; display:block; background-color:#f1ac33; background-repeat:no-repeat; background-position:center center; color:#fff; -webkit-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); -moz-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3);}
+.circle-green i{margin-top:10px; font-size:23pt;}
+.circle-green#icon1{bottom:20px;}
+.circle-green#icon2{bottom:90px;}
+.overlay{background-color:rgba(0, 0, 0, 0.5); width:100%; height:100%; position:absolute; z-index:9999; display:none; margin-top: 5em;}
+.overlayResultado{background-color:rgba(0, 0, 0, 0.5); width:100%; height:100%; position:absolute; z-index:9999; display:none; margin-top: 5em;}
+.overlayConsulta{background-color:rgba(0, 0, 0, 0.5); width:100%; height:100%; position:absolute; z-index:99; display:none; margin-top: 5em;}
+.window{width:90%; height:auto; max-height:90%; margin:auto; background:#fff; border-radius:6px; color:#595959; margin-top:20px; -webkit-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); -moz-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); display:none; position:relative; overflow:hidden; z-index: 9999;}
+
+.windowConsulta{width:90%; height:auto; margin:auto; background:#fff; border-radius:6px; color:#595959; margin-top:20px; -webkit-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); -moz-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); display:none; position:relative; overflow:hidden; z-index: 9999;}
+	
+.window a{color:#595959;}
+.window .rectangle-1{width:7%; height:100%; float:left; background-color:rgba(255, 255, 255, 0.55);}
+.window .rectangle-1 a{padding:23px 0;}
+.window .rectangle-2{width:100%; height:100%; float:left; margin-left:4%;}
+.window .rectangle-2 a{font-size:9pt; text-align:left;}
+.window .rectangle-2Consulta{width:100%; height:100%; float:left;}
+.window .rectangle-2Consulta a{font-size:9pt; text-align:left;}
+.window .rectangle-3{width:22%; height:100%; float:left; margin-right:1%;}
+.window .rectangle-3 a{font-size:9pt;}
+.window .rectangle-3 i{padding:10px 0px;}
+.window .rectangle-4 i{padding:10px 0px;}
+.window .rectangle-4{width:22%; height:100%; float:left;}
+.window .rectangle-4 a{font-size:9pt;}
+.window .row{width:100%; height:auto; overflow:hidden;}
+/*.window .row:nth-child(even){background:#fffbe4;}
+.window .row:nth-child(odd){background:#fdf5ca;}*/
+.window strong{font-weight:700;}
+.window h1{background:#4f90b8; color:#fff; margin:0px; padding:10px 10px; text-align:left; font-size:12pt; font-weight:300;}
+.window .close{font-size:12pt; color:#595959; background:#fff; width:24px; height:24px; border-radius:50%; position:absolute; top:-5px; right:-5px; box-sizing:border-box;}
+	
+.header{background:#057CC5; position:absolute; z-index: 10000000; height:64px; width:100%; top:0px; left:0px; font-size:12pt; font-weight:bold; text-transform:uppercase; color:#fff; text-align:right; -webkit-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2); -moz-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2); box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2);}
+.header span{display:block; color:#fff; padding-right:10px; padding-top:10px;}
+.header span span{font-size:9pt; padding-top:0px; padding-right:0px;}
+.header #logo-small{position:absolute; top:12px; left:10px; max-width:40px;}
+	
+label{display:block; text-align:left;}
+textarea{width:92%; border-radius:6px; border:none; height:140px; -webkit-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2); -moz-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2); box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2);}
+	
+input{width:90%; height:60px; color:#858585; font-size:12pt; background-color:#F5F5F5; background-position:13px center; background-repeat:no-repeat; background-size:25px; border-bottom:1px solid #F5F5F5; border-top:none; border-left:none; border-right:none; padding:5px 12px 5px 50px; box-sizing:border-box;}
+
+input:focus{background-color:#eeeeee;}
+
+button{background:#FFD504; border:none; color:#fff; width:70%; height:60px; padding:12px; box-sizing:border-box; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; margin-top:30px; font-size:18pt; text-transform:uppercase; letter-spacing:1pt;}
+
+	
+button{background:#f1ac33; border:none; color:#fff; width:60%; height:60px; padding:12px; box-sizing:border-box; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; margin-top:30px; font-size:18pt; text-transform:uppercase; letter-spacing:1pt;}
+	
+input:focus {
+  outline: none;
+}
+
+button:focus {
+  outline: none;
+}
+	
+.topinfo{border-radius: 10px; -webkit-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2); -moz-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2); box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2); width: 90%; margin:0px auto 5px auto; overflow: hidden; background: #fff; text-align:left;}
+.topinfo h1{font-size: 14pt; margin:0px; padding:0px 0px 15px 0px;}
+.topinfo span{display:block;}
+	
+#avatarUsuario{border-radius:50%; max-width:100px;}
+	
+#mapa:after {
+	width:40px;
+	height:71px;
+    display: block;
+    content: ' ';
+    position: absolute;
+    top: 50%; left: 50%;
+    margin: -70px 0 0 -20px;
+    background: url('img/pin_pessoa.fw.png');
+	background-size:40px 71px;
+    pointer-events: none; /* This disables clicks on the marker. Not fully supported by all major browsers, though */
+       
+}
+
+
+
+
+</style>
+</head>
+<body>
+<div id="container">
+<div id="mapa" style="width:100%; min-height:100%; position:absolute; z-index:1;"></div>
+  
+	<div class="header" >
+		<img id="logo-small" src="img/images.jpg">
+		<span style="color: #fff">Denatran<span style="color: #fff">Exames Toxicológicos</span></span>
+  	</div>
+	
+	<div class="overlay">
+    <div class="window" id="overlay-linhabus">
+      <!--<a class="close" href="#"><i class="fa fa-times" aria-hidden="true"></i></a>-->
+      <h1 id="nomeLabCaixa"></h1>
+      <div class="row" style="padding-bottom: 5px; width: 90%;">        
+        <div class="rectangle-2" id="dadosLab">
+			
+			
+        </div>
+		       
+      </div>
+      
+    </div>
+  </div>
+
+
+
+
+
+<div class="overlayConsulta"></div>
+
+<div class="row" id="telaConsulta" style="margin-top: 5em; position: absolute; width: 100%; height: auto; z-index: 999999; text-align: center; overflow: auto;">
+    <div class="window" id="overlay-linhabusConsulta">
+      <!--<a class="close" href="#"><i class="fa fa-times" aria-hidden="true"></i></a>-->
+      <h1>Consulta exame</h1>
+      <div class="row" style="padding-bottom: 5px; overflow: auto; width: 100%; height: auto; text-align: center;">        
+        
+          <input id="cpfConsulta" type="number" name="cpfConsulta" value="" placeholder="CPF" style="background-image:url(img/person-icon.png); margin-top: 1em;">
+		
+		<div class="row" style="padding-bottom: 5px; overflow: auto; height: auto;">        
+			<button id="btnConsulta">Consultar</button>
+		</div>
+		       
+      </div>
+		
+	</div>
+	
+	
+      
+    </div>
+  
+<div class="overlayResultado">
+<!--<div class="row" style="margin-top: 5em; position: absolute; width: 90%; height: auto; z-index: 999999; text-align: center; overflow: auto;">-->
+<div class="topinfo" style="margin-top: 4em;">
+        <div class="col-4-sm" style="text-align: center; margin-top: 2em;">
+          <img id="avatarUsuario" src="img/iconePessoa.fw.png">
+        </div>		 
+        <div class="col-7-sm" style="margin-left: 10px; color:#000; text-align: center;">
+			<h1 id="nomeUsuario" style="margin-bottom: -10px; margin-top: 15px; font-size: 15px; font-weight: bold;"></h1>
+			<span style="font-size: 10px;" id="cnhResultado"></span>
+			<span style="font-size: 10px;" id="labResultado"></span>          
+			<span style="font-size: 10px;" id="diaResultado"></span>          
+			<span style="font-size: 10px;"><img id="iconeResultado" src="img/aprovado.fw.png" width="200" height="245" alt=""/></span>          
+			<span style="font-size: 30px; font-weight: bold;" id="textoResultado">Aprovado</span></br>          
+			
+        </div>
+		  	  
+      </div>
+<!--</div>-->
+</div>
+
+
+  <div id="news" style=" position: inherit; z-index:10;">
+    <div class="marquee" data-duplicated='true'><span></span>15:40 - Exames toxicológicos obrigatório para renovação de categorias C, D, E</div>
+  </div>
+  
+  
+	<span id="icon2" class="circle-green" style="position: absolute; z-index:10; bottom:19%; right:5%;"><i class="fa fa-location-arrow" aria-hidden="true"></i></span>
+	
+	<!--<span id="icon1" class="circle-green" style="position: absolute; z-index:10; bottom:15%; right:5%;"><i class="fa fa-search" aria-hidden="true"></i></span>-->
+	
+	<span id="icon3" class="circle-green" style="position: absolute; z-index:10; bottom:8%; right:5%;"><i class="fa fa-address-card" aria-hidden="true"></i></span>
+ 	
+	
+</div> <!-- fecha container -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type='text/javascript' src='http://cdn.jsdelivr.net/jquery.marquee/1.3.1/jquery.marquee.min.js'></script>
+
+<script>
+
+document.addEventListener("deviceready", function() {
+	
+var mapCanvas;
+var markers = [];
+var paraDragEnd;
+var objLab;
+var geocoder;
+var markersVisivel = [];
+
+//$('#cpfConsulta').mask('000.000.000-00', {reverse: false});
+	
+  $('.marquee').marquee({
+    //speed in milliseconds of the marquee
+    duration: 5000,
+    //gap in pixels between the tickers
+    gap: 50,
+    //time in milliseconds before the marquee will start animating
+    delayBeforeStart: 0,
+    //'left' or 'right'
+    direction: 'left',
+    //true or false - should the marquee be duplicated to show an effect of continues flow
+    duplicated: true
+  });
+  
+  //$('.close1').click(function(e){
+    //$('#linhabus').hide();
+	//$('#ponto').fadeIn();
+	//alert('01');
+  //});
+  //$('.open1').click(function(e){
+    //$('.overlay').fadeToggle();
+    //$('#overlay-linhabus').fadeToggle();
+	//alert('02');
+  //});
+  //$('.overlay-open1').click(function(e){
+    //$('#ponto').hide();
+	//$('.overlay').fadeToggle();
+    //$('#overlay-linhabus').fadeToggle();
+    //$('#linhabus').fadeToggle();	
+	//alert('03');
+  //});
+  $('.close').click(function(e){
+    $('.overlay').fadeToggle();
+    $('#overlay-linhabus').fadeToggle();	
+	//alert('04');
+  });
+  
+  $('.overlay').click(function(e){
+    $('#overlay-linhabus').fadeOut();
+	$(this).fadeOut();
+	//alert('04');
+  });
+	
+$('.overlayConsulta').click(function(e){
+    $('#overlay-linhabusConsulta').fadeOut();
+	$(this).fadeOut();
+	//alert('04');
+  });
+	
+  
+  $('#ponto').click(function(e){
+    $('.overlay').fadeToggle();
+    $('#overlay-linhabus').fadeToggle();
+  });
+  
+//});
+	
+	$('#btnConsulta').click(function(e){
+		
+	$('#overlay-linhabusConsulta').fadeOut();
+	$('.overlayConsulta').fadeOut();
+		
+	var campoCpf = $('#cpfConsulta').val();    
+	$.getJSON('http://busonline.com.br/api/exame/'+campoCpf, function(obj) {
+		
+		var nome = obj.nome;
+		var cnh = obj.cnh;
+		var cpf = obj.cpf;
+		var data = obj.data;
+		var lab = obj.laboratorio;
+		var resultado = obj.resultado;
+		var foto = obj.urlFoto;
+		
+		$("#avatarUsuario").attr("src", foto);
+		$('#nomeUsuario').html(nome);
+		$('#cnhResultado').html("CNH: "+cnh);
+		$('#labResultado').html(lab);
+		$('#diaResultado').html(data);
+				
+		if(resultado == true){
+			
+			$("#iconeResultado").attr("src", "img/aprovado.fw.png");
+			$('#textoResultado').html("Aprovado");
+			
+		}else{
+			
+			$("#iconeResultado").attr("src", "img/reprovado.fw.png");
+			$('#textoResultado').html("Reprovado");
+			
+		}
+						
+		$('.overlayResultado').fadeIn();
+			
+	})
+		
+	
+	//alert('04');
+  });
+	
+	$('.overlayResultado').click(function(e){    
+	$(this).fadeOut();
+	//alert('04');
+  });
+	
+	
+function initialize() {
+		
+		var mapOptions = {
+		disableDefaultUI: true,
+        mapTypeId: 'roadmap',
+		zoom: 15,
+		clickableIcons: false,
+		styles: [{ featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }]}],
+     };
+	 	
+				//var latitude = '-22.966446';
+				//var longitude = '-43.037528';
+
+				//montaMapa(latitude,longitude);
+				montaMapa();			
+
+	function montaMapa(){
+
+	mapCanvas = new google.maps.Map(document.getElementById("mapa"), mapOptions);
+	geocoder = new google.maps.Geocoder;
+    //mapCanvas.setCenter({lat:-22.966446, lng:-43.037528});
+				
+		var onSuccess = function(position) {       	
+			
+			mapCanvas.setCenter({lat:position.coords.latitude, lng:position.coords.longitude});
+			var latlng = {lat: position.coords.latitude, lng: position.coords.longitude};
+			geocodeLatLng(geocoder, mapCanvas);
+    };
+
+    // onError Callback receives a PositionError object
+    //
+    function onError(error) {
+        alert('code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
+    }
+
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);		
+		
+	//var latlng = {lat: -22.966446, lng: -43.037528};	 
+	  
+	  }
+	
+	
+	
+	
+
+	//$.getJSON('http://busonline.com.br/api/labendereco', function(obj) {
+						
+			//objLab = obj;
+			
+			//for (i = 0; i < objLab.length; i++) { 
+				
+			//var id = objLab[i].id;
+			
+			//var latLaboratorio = objLab[i].latitude;
+			//var longLaboratorio = objLab[i].longitude;			
+							
+			//var latlng = {lat: parseFloat(latLaboratorio), lng: parseFloat(longLaboratorio)};
+			
+			//var marker = new google.maps.Marker({
+					 //position: latlng,
+					  //map: mapCanvas,					  
+					  //id: i+1,
+					  //numMarcador: i,
+					  //icon: {						
+						//url: "img/pin-ponto01.fw.png",
+						//scaledSize: new google.maps.Size(40,45),						
+						//}
+					//});
+
+				//google.maps.event.addListener(marker, 'click', idMarcador);
+
+				//markers.push(marker);
+				
+			//}
+		
+	//});
+			
+	//$('#cpfConsulta').mask('000.000.000-00');	
+	//$('#cpfConsulta').mask('000.000.000-00', {reverse: true});
+		
+    
+}
+	  
+initialize();
+	
+	
+///////////////////////////////////////////////////////////////////////////
+
+$('#icon2').click(function(){
+
+			
+		var onSuccess = function(position) {       	
+			
+			mapCanvas.setCenter({lat:position.coords.latitude, lng:position.coords.longitude});
+			var latlng = {lat: position.coords.latitude, lng: position.coords.longitude};
+			geocodeLatLng(geocoder, mapCanvas);
+    };
+
+    // onError Callback receives a PositionError object
+    //
+    function onError(error) {
+        alert('code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
+    }
+
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+	
+	mapCanvas.setZoom(15);
+			
+})	  
+
+	
+	
+	
+	
+	
+	
+
+	$('#icon3').click(function(){
+	
+	//$('#ponto').hide();
+	$('.overlayConsulta').fadeToggle();
+    $('#overlay-linhabusConsulta').fadeToggle();
+    //$('#linhabus').fadeToggle();
+	document.getElementById('cpfConsulta').value = '';
+	$("#cpfConsulta").focus();
+		
+	})
+	
+	
+			mapCanvas.addListener('dragstart', function() {	
+			
+			console.log('inicio drag');
+			deleteMarkers();
+			//google.maps.event.clearListeners(mapCanvas, 'dragstart');
+			
+			///////////////////////////////////////// final dragstart						
+						
+			}); // fecha dragstart
+	
+	
+			 function setMapOnAll() {
+				  for (var i = 0; i < markers.length; i++) {
+					markers[i].setMap(null);
+				  }
+				}
+
+
+				// Deletes all markers in the array by removing references to them.
+				function deleteMarkers() {
+				  setMapOnAll();
+				  markers = [];
+				}
+
+			
+	
+	
+	
+	
+	
+									
+								
+				mapCanvas.addListener('dragend', function() {
+								
+				//$("#rodape").html(entrouDragEnd);											
+				
+				clearTimeout(paraDragEnd);
+				paraDragEnd = setTimeout(function(){
+					
+									
+					geocodeLatLng(geocoder, mapCanvas);
+												
+						
+					mapCanvas.addListener('dragstart', function() {	
+										
+					deleteMarkers();
+					//google.maps.event.clearListeners(mapCanvas, 'dragstart');
+					
+			
+			///////////////////////////////////////// final dragstart						
+						
+			}); // fecha dragstart
+				
+				
+					//criaPontosDragEnd();
+					//google.maps.event.clearListeners(mapCanvas, 'dragend');
+					//google.maps.event.clearListeners(mapCanvas, 'dragend');
+					//objLab = '';
+					//geocodeLatLng(geocoder, mapCanvas);
+					//google.maps.event.clearListeners(mapCanvas, 'dragstart');
+					
+					
+				
+					}, 1000); // fecha settimeout
+				
+				//google.maps.event.clearListeners(mapCanvas, 'dragend');
+					
+				
+				
+				
+				}); // fecha dragend
+	
+	mapCanvas.addListener('drag', function() {
+				
+				clearTimeout(paraDragEnd);
+				//google.maps.event.removeListener(mapCanvas, 'dragstart');
+				//google.maps.event.removeListener(mapCanvas, 'dragend');
+				
+				//google.maps.event.clearListeners(mapCanvas, 'dragstart');
+				//google.maps.event.clearListeners(mapCanvas, 'dragend');
+				
+			});
+				
+			
+	function geocodeLatLng(geocoder, mapCanvas) {
+	  var input = mapCanvas.getCenter().toUrlValue();
+	  var latlngStr = input.split(',', 2);
+	  var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+	  geocoder.geocode({'location': latlng}, function(results, status) {
+		if (status === google.maps.GeocoderStatus.OK) {
+		  if (results[1]) {
+			  
+			markersVisivel = [];
+			marker = '';
+			  
+			$.getJSON('http://busonline.com.br/api/labendereco', function(obj) {
+						
+			objLab = obj;
+			console.log('quant reg: '+objLab.length);
+			console.log(markers);
+			
+			for (i = 0; i < objLab.length; i++) { 
+				
+			var id = objLab[i].id;
+			//var nomeLaboratorio = obj[i].nome;
+			//var endLaboratorio = obj[i].endereco;
+			//var horarioLaboratorio = obj[i].horario;
+			var latLaboratorio = objLab[i].latitude;
+			var longLaboratorio = objLab[i].longitude;			
+							
+				console.log(objLab[i].latitude+'//'+objLab[i].longitude);			
+				
+				var lat1 = parseFloat(latlngStr[0]);
+				var lon1 = parseFloat(latlngStr[1]);
+				
+				console.log(parseFloat(latlngStr[0])+'//'+parseFloat(latlngStr[1]));
+								
+				var lat2 = parseFloat(objLab[i].latitude);
+				var lon2 = parseFloat(objLab[i].longitude);					
+								
+				//conta++;
+			
+			var R = 6371; // Radius of the earth in km
+			  var dLat = (lat2 - lat1) * Math.PI / 180;			 
+			  var dLon = (lon2 - lon1) * Math.PI / 180;			  
+			  p1 = (lat1 * Math.PI / 180);			  
+			  p2 = (lat2 * Math.PI / 180);			  
+			  var a = 
+				 0.5 - Math.cos(dLat)/2 + 
+				 Math.cos(p1) * Math.cos(p2) * 
+				 (1 - Math.cos(dLon))/2;
+				
+				 			
+			  var distanciaAproximada = R * 2 * Math.asin(Math.sqrt(a));
+			  		  			  
+			  var distanciaAproximadaFormat = distanciaAproximada*1000;
+			  			  
+			  var distFinal = Math.round(distanciaAproximadaFormat);
+				
+				console.log(distFinal);
+			  
+			  if(distFinal <= 5000){ // tá no raio
+				
+				var latlngLab = {lat: parseFloat(latLaboratorio), lng: parseFloat(longLaboratorio)};
+				  
+				  console.log('cria marker com');
+
+				var marker = new google.maps.Marker({
+						  position: latlngLab,
+						  map: mapCanvas,					  
+						  id: i+1,
+						  numMarcador: i,
+						  icon: {						
+							url: "img/pin-ponto01.fw.png",
+							scaledSize: new google.maps.Size(40,45),						
+							}
+						});
+				  
+				  markersVisivel.push(i);
+					
+				  
+			  }else{
+				  
+				  var latlngLab = {lat: parseFloat(latLaboratorio), lng: parseFloat(longLaboratorio)};
+				  
+				  console.log('cria marker sem');
+
+				var marker = new google.maps.Marker({
+						  position: latlngLab,
+						  map: mapCanvas,
+						  visible: false,
+						});
+				  
+				  
+			  }
+				
+				console.log('criou marcador');
+				//google.maps.event.clearListeners(marker, 'click');
+				google.maps.event.addListener(marker, 'click', idMarcador);
+
+				markers.push(marker);				  
+				  
+							  
+			}			  
+			  
+		  });
+			   
+			   
+			  				
+			}
+			
+		}
+		  
+	  });
+		
+		//google.maps.event.clearListeners(mapCanvas, 'dragend');
+		
+	}
+			  
+			  
+			  
+			  
+			  
+			
+	function idMarcador(e) {		
+		
+		 for (var j = 0; j < markersVisivel.length; j++) {			
+			
+			markers[markersVisivel[j]].setIcon({
+            url: "img/pin-ponto01.fw.png",
+			scaledSize: new google.maps.Size(40,45)
+       })
+					
+	}
+	
+		
+	console.log(this.numMarcador);
+		
+	$('.overlay').fadeToggle();
+    $('#overlay-linhabus').fadeToggle();
+    		
+		var numM = this.numMarcador;
+		
+		markers[numM].setIcon({
+            url: "img/pin-pontoactive.png",
+			scaledSize: new google.maps.Size(50,56)
+        })
+		
+		var endereco = objLab[numM].endereco;
+		var horario = objLab[numM].horario;
+		var nomeLab = objLab[numM].nome;		
+		
+	//var montaPonto = '<div class="rectangle-1"><a class="open1" href="#"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></a></div><div class="rectangle-2"><a class="open1" href="#">'+endereco+'</a><a class="open1" href="#">'+horario+'</span></div>';
+		
+	var montaPonto = '<strong><span id="endCaixa">'+endereco+'</span></br><span id="endCaixa01"></span></strong><br>Horário de Funcionamento:</br><span id="horaCaixa" style="font-size: 0.5em;">'+horario+'</span></br><span id="horaCaixa01"></span>';
+	
+	$("#nomeLabCaixa").html(nomeLab);
+	$("#dadosLab").html(montaPonto);
+		
+		
+		
+				
+	}
+			  			  
+				
+		  
+		  
+			  
+			  
+			  
+			  
+			  
+		
+			
+
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+			
+			
+	function criaPontosDragEnd(){
+	
+		
+	
+	
+	var posicao = ['-22.901623, -43.105316','-22.903903, -43.103811','-22.906277, -43.106337','-22.907852, -43.109705','-22.902724, -43.115057'];
+
+for(i=0; i<posicao.length; i++){
+
+var latlngStr = posicao[i].split(',', 3);
+var latlng = {lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1])};
+var latFormat = parseFloat(latlngStr[0]);
+var longFormat = parseFloat(latlngStr[1]);
+var posFormat = latFormat+','+longFormat;
+
+var marker = new google.maps.Marker({
+          position: latlng,
+          map: mapCanvas,
+		  //id: latlngStr[2],
+		  id: i+1,
+		  numMarcador: i,
+		  icon: {						
+			url: "img/pin-ponto01.fw.png",
+			scaledSize: new google.maps.Size(40,45),						
+			//anchor: new google.maps.Point(30, 40),
+			//origin: new google.maps.Point(0,0), // origin
+			}
+		  
+		  
+		  	  
+        });
+
+	google.maps.event.addListener(marker, 'click', idMarcadorDrag);
+	
+	markers.push(marker);
+	
+	//if(i == 1){
+		
+		////////$('#marker').trigger('click');
+		//marker.setIcon({
+            //url: "img/pin-pontoactive.png",
+			//scaledSize: new google.maps.Size(50,56)
+        //})
+		
+	//}
+	
+
+	}
+	
+} ///// fecha pontos dragend
+	
+	
+	
+	
+	function idMarcadorDrag(e) {		
+		
+		 for (var j = 0; j < markers.length; j++) {
+			//markers[j].setIcon("img/pin-ponto.png");
+			
+			markers[j].setIcon({
+            url: "img/pin-ponto01.fw.png",
+			scaledSize: new google.maps.Size(40,45)
+        })
+					
+	}
+	    
+	$('.overlay').fadeToggle();
+    $('#overlay-linhabus').fadeToggle();
+    		
+		var numM = this.numMarcador;
+		
+		markers[numM].setIcon({
+            url: "img/pin-pontoactive.png",
+			scaledSize: new google.maps.Size(50,56)
+        })
+		
+		var endereco = objLab[numM].endereco;
+		var horario = objLab[numM].horario;
+		var nomeLab = objLab[numM].nome;		
+		
+	//var montaPonto = '<div class="rectangle-1"><a class="open1" href="#"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></a></div><div class="rectangle-2"><a class="open1" href="#">'+endereco+'</a><a class="open1" href="#">'+horario+'</span></div>';
+		
+	var montaPonto = '<strong><span id="endCaixa">'+endereco+'</span></br><span id="endCaixa01"></span></strong><br>Horário de Funcionamento:</br><span id="horaCaixa" style="font-size: 0.5em;">'+horario+'</span></br><span id="horaCaixa01"></span>';
+	
+	$("#nomeLabCaixa").html(nomeLab);
+	$("#dadosLab").html(montaPonto);
+		
+		
+		
+				
+	}
+	
+	
+
+}); // fecha deviceready
+	  
+</script>
+</body>
+</html>

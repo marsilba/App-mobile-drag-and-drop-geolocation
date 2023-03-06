@@ -1,0 +1,71 @@
+
+
+html, body{height:100%;}
+body{background:#ccc; margin:0px; padding:0px; text-align:center; font-family:Open Sans, sans-serif; color:#fff; font-weight:300; letter-spacing:1px; text-transform:uppercase; font-size:9pt;}
+div{white-space:nowrap;}
+a{color:#fff; text-decoration:none;}
+#container{width:100%; height:100%; min-height:100%; position:relative;}
+#news{width:100%; height:30px; background:#444444; line-height:30px;}
+#news .marquee{width:100%; overflow:hidden;}
+#news span{background:#ed491d; width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:5px; margin-left:5px;}
+#ponto{width:100%; height:90px; background:#4f90b8; -webkit-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); -moz-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3);}
+#linhabus{width:100%; height:90px; background:#5bb84f; -webkit-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); -moz-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3);}
+.overlay{background-color:rgba(0, 0, 0, 0.5); width:100%; height:100%; position:absolute; z-index:9999; display:none; margin-top: 5em;}
+.overlayResultado{background-color:rgba(0, 0, 0, 0.5); width:100%; height:100%; position:absolute; z-index:9999; display:none; margin-top: 5em;}
+.overlayConsulta{background-color:rgba(0, 0, 0, 0.5); width:100%; height:100%; position:absolute; z-index:99; display:none; margin-top: 5em;}
+.window{width:90%; height:auto; max-height:90%; margin:auto; background:#fff; border-radius:6px; color:#595959; margin-top:20px; -webkit-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); -moz-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); display:none; position:relative; overflow:hidden; z-index: 9999;}
+.windowConsulta{width:90%; height:auto; margin:auto; background:#fff; border-radius:6px; color:#595959; margin-top:20px; -webkit-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); -moz-box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); box-shadow: 0px 7px 6px -3px rgba(0,0,0,0.3); display:none; position:relative; overflow:hidden; z-index: 9999;}	
+.window a{color:#595959;}
+.window .rectangle-1{width:7%; height:100%; float:left; background-color:rgba(255, 255, 255, 0.55);}
+.window .rectangle-1 a{padding:23px 0;}
+.window .rectangle-2{width:100%; height:100%; float:left; margin-left:4%;}
+.window .rectangle-2 a{font-size:9pt; text-align:left;}
+.window .rectangle-2Consulta{width:100%; height:100%; float:left;}
+.window .rectangle-2Consulta a{font-size:9pt; text-align:left;}
+.window .rectangle-3{width:22%; height:100%; float:left; margin-right:1%;}
+.window .rectangle-3 a{font-size:9pt;}
+.window .rectangle-3 i{padding:10px 0px;}
+.window .rectangle-4 i{padding:10px 0px;}
+.window .rectangle-4{width:22%; height:100%; float:left;}
+.window .rectangle-4 a{font-size:9pt;}
+.window .row{width:100%; height:auto; overflow:hidden;}
+.window strong{font-weight:700;}
+.window h1{background:#4f90b8; color:#fff; margin:0px; padding:10px 10px; text-align:left; font-size:12pt; font-weight:300;}
+.window .close{font-size:12pt; color:#595959; background:#fff; width:24px; height:24px; border-radius:50%; position:absolute; top:-5px; right:-5px; box-sizing:border-box;}	
+.header{background:#057CC5; position:absolute; z-index: 10000000; height:64px; width:100%; top:0px; left:0px; font-size:12pt; font-weight:bold; text-transform:uppercase; color:#fff; text-align:right; -webkit-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2); -moz-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2); box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2);}
+.header span{display:block; color:#fff; padding-right:10px; padding-top:10px;}
+.header span span{font-size:9pt; padding-top:0px; padding-right:0px;}
+.header #logo-small{position:absolute; top:12px; left:10px; max-width:40px;}	
+label{display:block; text-align:left;}
+textarea{width:92%; border-radius:6px; border:none; height:140px; -webkit-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2); -moz-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2); box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2);}	
+input{width:90%; height:60px; color:#858585; font-size:12pt; background-color:#F5F5F5; background-position:13px center; background-repeat:no-repeat; background-size:25px; border-bottom:1px solid #F5F5F5; border-top:none; border-left:none; border-right:none; padding:5px 12px 5px 50px; box-sizing:border-box;}
+input:focus{background-color:#eeeeee;}
+button{background:#FFD504; border:none; color:#fff; width:70%; height:60px; padding:12px; box-sizing:border-box; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; margin-top:30px; font-size:18pt; text-transform:uppercase; letter-spacing:1pt;}	
+button{background:#f1ac33; border:none; color:#fff; width:60%; height:60px; padding:12px; box-sizing:border-box; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; margin-top:30px; font-size:18pt; text-transform:uppercase; letter-spacing:1pt;}
+	
+input:focus {
+  outline: none;
+}
+
+button:focus {
+  outline: none;
+}
+	
+.topinfo{border-radius: 10px; -webkit-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2); -moz-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2); box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.2); width: 90%; margin:0px auto 5px auto; overflow: hidden; background: #fff; text-align:left;}
+.topinfo h1{font-size: 14pt; margin:0px; padding:0px 0px 15px 0px;}
+.topinfo span{display:block;}	
+#avatarUsuario{border-radius:50%; max-width:100px;}	
+#mapa:after {
+	width:40px;
+	height:71px;
+    display: block;
+    content: ' ';
+    position: absolute;
+    top: 50%; left: 50%;
+    margin: -70px 0 0 -20px;
+    background: url('img/pin_pessoa.fw.png');
+	background-size:40px 71px;
+    pointer-events: none; /* This disables clicks on the marker. Not fully supported by all major browsers, though */
+       
+}
+

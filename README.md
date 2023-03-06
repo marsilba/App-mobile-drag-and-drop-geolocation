@@ -41,7 +41,9 @@ https://user-images.githubusercontent.com/28272136/223017107-1775ffda-d00a-423e-
 
 - The mobile app simply drags and drops the map to the desired location.
 
-- All registered laboratories within a 5km radius will be displayed on the map, with the necessary information.
+- All registered laboratories within a 5km radius will be displayed on the map.
+
+- Click on the icons directly on the map and see the necessary information.
 
 https://user-images.githubusercontent.com/28272136/223016870-a2e66ec2-f702-4bbf-9258-18ab907e54ca.mp4
 

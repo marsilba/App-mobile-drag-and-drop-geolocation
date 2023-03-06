@@ -37,6 +37,7 @@ Toxicological tests are mandatory for professional drivers and only registered l
 
 https://user-images.githubusercontent.com/28272136/223017107-1775ffda-d00a-423e-a4fc-2592721aa6a4.mp4
 
+<br>
 <h2>App Mobile</h2>
 
 - The mobile app simply drags and drops the map to the desired location.

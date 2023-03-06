@@ -1,3 +1,4 @@
+
 document.addEventListener("deviceready", function() {
 	
     var mapCanvas;

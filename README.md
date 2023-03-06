@@ -5,7 +5,7 @@ Mobile app that informs the location of laboratories for drug testing in Brazili
 There is a web version with the server and administrator area and a mobile version for viewing the laboratories on the map through geolocation.
 
 <h2>How it works</h2>
-<h3>Server Web - admin</h3>
+<h3>Web Server - admin</h3>
 
 First, it is necessary to register the laboratories for display in the mobile app on the map.
 
@@ -29,11 +29,19 @@ The result of the toxicological test can be verified, informing your CPF, where 
 Toxicological tests are mandatory for professional drivers and only registered laboratories are authorized to carry out the test.
 
 <h2>Web Server</h2>
-<p></p>
+
+- Register the laboratories just by clicking on the map.
+
+- Enter the necessary telephone information and opening hours.
+
 
 https://user-images.githubusercontent.com/28272136/223017107-1775ffda-d00a-423e-a4fc-2592721aa6a4.mp4
 
 <h2>App Mobile</h2>
+
+- The mobile app simply drags and drops the map to the desired location.
+
+- All registered laboratories within a 5km radius will be displayed on the map, with the necessary information.
 
 https://user-images.githubusercontent.com/28272136/223016870-a2e66ec2-f702-4bbf-9258-18ab907e54ca.mp4
 
